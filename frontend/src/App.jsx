@@ -15,8 +15,8 @@ const App = () => {
     palette: {
       mode: 'dark',
       background: {
-        default: '#202124', // App background color
-        paper: '#25272c',   // Navbar and surface background color
+        default: '#090710', // App background color
+        paper: '#19152e',   // Navbar and surface background color
       },
       text: {
         primary: '#ffffff', // Text color for better contrast
@@ -28,6 +28,14 @@ const App = () => {
       secondary: {
         main: '#f48fb1',
       },
+      error: {
+        main: '#f44336',
+      },
+      custom: {
+        glow: {
+          main: '#18202A', // Glow color
+        } 
+      }
     },
   });
 
@@ -35,11 +43,13 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <Container width="100%" height="100%" sx={{backgroundImage: 'radial-gradient(circle, rgb(20, 12, 54) 0%, rgba(9,7,16,1) 65%)'}}>
         <Container>
           <Navbar user={user} onLogout={handleLogout} />
           <Routes>
             <Route path="/" element={<Homepage />} />
           </Routes>
+        </Container>
         </Container>
       </Router>
     </ThemeProvider>

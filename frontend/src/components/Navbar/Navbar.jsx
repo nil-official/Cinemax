@@ -22,7 +22,7 @@ const Navbar = ({ user, onLogout }) => {
           component={Link}
           to="/"
           variant="h6"
-          sx={{ marginLeft: "32px", textDecoration: 'none', color: theme.palette.text.primary, fontFamily: "Arial", fontWeight: "bold", fontSize: "26px", display: 'inline' }}
+          sx={{ marginLeft: {xs: "4px", sm: "32px"}, textDecoration: 'none', color: theme.palette.text.primary, fontFamily: "Arial", fontWeight: "bold", fontSize: "26px", display: 'inline' }}
         >
           CINEMAX
         </Typography>
