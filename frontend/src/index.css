@@ -1,0 +1,5 @@
+@font-face {
+    font-family: "Regular";   /*Can be any text*/
+    src: local("OvercameDemoRegular"),
+      url("./assets/fonts/OvercameDemoRegular.ttf") format("truetype");
+  }
