@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline, Container } from '@mui/material';
 import Navbar from './components/Navbar/Navbar';
 import Homepage from './pages/Homepage';
+import Testpage from './pages/Testpage';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -15,8 +16,8 @@ const App = () => {
     palette: {
       mode: 'dark',
       background: {
-        default: '#090710', // App background color
-        paper: '#19152e',   // Navbar and surface background color
+        default: '#070910', // App background color
+        paper: '#151b2e',   // Navbar and surface background color
       },
       text: {
         primary: '#ffffff', // Text color for better contrast
@@ -43,11 +44,12 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Container width="100%" height="100%" sx={{backgroundImage: 'radial-gradient(circle, rgb(20, 12, 54) 0%, rgba(9,7,16,1) 65%)'}}>
+        <Container width="100%" height="100%" sx={{backgroundImage: 'radial-gradient(circle, rgb(12, 22, 54) 0%, rgba(7,9,16,1) 65%)'}}>
         <Container>
           <Navbar user={user} onLogout={handleLogout} />
           <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="/test" element={<Testpage />} />
           </Routes>
         </Container>
         </Container>
