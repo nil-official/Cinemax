@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline, Container } from '@mui/material';
 import Navbar from './components/Navbar/Navbar';
 import Homepage from './pages/Homepage';
+import Moviepage from './pages/Moviepage';
 import Testpage from './pages/Testpage';
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
           <Navbar user={user} onLogout={handleLogout} />
           <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="/movie/:movieId" element={<Moviepage />} />
             <Route path="/test" element={<Testpage />} />
           </Routes>
         </Container>
