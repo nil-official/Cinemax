@@ -6,6 +6,8 @@ const throttler = require('./utils/throttleMiddleware')
 
 // Routes
 const movieRouter = require('./routes/movies');
+const showtimeRouter = require('./routes/showtimes');
+const screenRouter = require('./routes/screens');
 
 const app = express();
 app.disable('x-powered-by');
@@ -42,5 +44,7 @@ app.use(express.json());
 // app.use(throttler);
 
 app.use(movieRouter);
+app.use(showtimeRouter);
+app.use(screenRouter);
 
 app.listen(port, () => console.log(`app is running in PORT: ${port}`));
