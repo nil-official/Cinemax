@@ -6,6 +6,8 @@ import { ThemeProvider, createTheme, CssBaseline, Container } from '@mui/materia
 import Navbar from './components/Navbar/Navbar';
 import Homepage from './pages/Homepage';
 import Moviepage from './pages/Moviepage';
+import Showtimespage from './pages/Showtimespage';
+import SeatLayoutpage from './pages/SeatLayoutpage';
 import Testpage from './pages/Testpage';
 
 const App = () => {
@@ -51,6 +53,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/movie/:movieId" element={<Moviepage />} />
+            <Route path="/movie/:movieId/showtimes" element={<Showtimespage />} />
+            <Route path="/movie/:movieId/showtimes/:showtimeId/seatlayout" element={<SeatLayoutpage />} />
             <Route path="/test" element={<Testpage />} />
           </Routes>
         </Container>

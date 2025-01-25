@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMovie, fetchMovies } from '../store/actions/movies';
+import { resetShowtimes } from '../store/actions/showtimes';
 import { Button } from '@mui/material';
 
 const Moviepage = () => {
@@ -28,6 +29,11 @@ const Moviepage = () => {
         }
     }, [status, movieId, dispatch, movies]);
 
+    const handleGetShowtimesClick =() => {
+        dispatch(resetShowtimes());
+        navigate(`/movie/${movieId}/showtimes`)
+    }
+
     return (
         <div>
             {status === 'loading' && <p>Loading...</p>}
@@ -40,7 +46,7 @@ const Moviepage = () => {
             )}
             {status === 'failed' && <p>{error}</p>}
 
-            <Button>Get Showtimes</Button>
+            <Button onClick={handleGetShowtimesClick}>Get Showtimes</Button>
             <br />
             <button onClick={() => navigate('/')}>Home</button>
         </div>
