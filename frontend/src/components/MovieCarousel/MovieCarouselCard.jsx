@@ -1,9 +1,22 @@
 import React from 'react'
 import { Box, Card, CardMedia, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectMovie } from '../../store/actions/movies';
+
 
 const MovieCarouselCard = ({ movie, theme }) => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleMovieSelect = (movie) => {
+        dispatch(selectMovie(movie));
+        navigate(`/movie/${movie._id}`);
+    }
+
     return (
-        <Box >
+        <Box sx={{ cursor: 'pointer' }} onClick={()=>handleMovieSelect(movie)}>
             <Card
                 sx={{
                     width: '150px',

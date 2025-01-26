@@ -2,11 +2,11 @@ import React from 'react';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { Box, Typography, useMediaQuery, Grid } from '@mui/material';
-import movies from '../../../data/movies.json';
+// import movies from '../../../data/movies.json';
 import { useTheme } from '@mui/material/styles';
 import MovieCarouselCard from './MovieCarouselCard';
 
-const MovieCarousel = () => {
+const MovieCarousel = ({movies}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect mobile screens
   const isTabletOrDesktop = useMediaQuery(theme.breakpoints.up('md')); // Detect tablet and above
