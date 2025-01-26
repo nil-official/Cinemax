@@ -1,26 +1,32 @@
-import React from 'react'
-import { featuredMovie } from '../../data/movies';
-import WideMovieCard from '../components/WideMovieCard';
+import React, { useEffect } from 'react'
 import { Box, Typography, Divider } from '@mui/material';
+import WideMovieCard from '../components/WideMovieCard';
 import MovieCarousel from '../components/MovieCarousel/MovieCarousel';
-import { useTheme } from '@mui/material/styles';
+import { featuredMovie } from '../../data/movies';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchMovies } from '../store/actions/movies';
 
 const Homepage = () => {
+  const dispatch = useDispatch();
+  const { movies, selectedMovie, status, error } = useSelector((state) => state.movieState);
 
-  const theme = useTheme();
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchMovies());
+    }
+  }, [status, dispatch]);
 
   return (
     <Box sx={{ borderRadius: '10px' }}>
-
-      <WideMovieCard movie={featuredMovie}/>
+      <WideMovieCard movie={featuredMovie} />
 
       <Typography sx={{ padding: '16px', fontSize: '22px' }}>Now Showing</Typography>
-      <MovieCarousel />
+      <MovieCarousel movies={movies} />
 
       <Divider sx={{ borderColor: 'none', marginTop: 2, marginBottom: 2 }} />
 
       <Typography sx={{ padding: '16px', fontSize: '22px' }}>Upcoming Shows</Typography>
-      <MovieCarousel />
+      <MovieCarousel movies={movies} />
     </Box>
   )
 }
