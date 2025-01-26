@@ -15,6 +15,10 @@ const SeatLayoutpage = () => {
     const { screen, status, error } = useSelector((state) => state.screenState);
     const { selectedShowtime } = useSelector((state) => state.showtimeState);
 
+    // for temp use
+    const rows = 10;
+    const cols = 10;
+
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchScreen(selectedShowtime.screenId));
@@ -30,31 +34,46 @@ const SeatLayoutpage = () => {
                 status === 'succeeded' && screen &&
 
                 <Grid container direction="column" spacing={1} justifyContent="center" style={{ flexWrap: 'nowrap', overflowX: 'auto' }}>
-                    {Array.from({ length: 10 }, (_, rowIndex) =>
-                        // Array.from({ length: 10 }, (_, colIndex) => `${rowIndex * 10 + colIndex + 1},`)
-                        <Grid item container key={rowIndex} spacing={1} justifyContent="center" style={{ flexWrap: 'nowrap' }}>
-                            {Array.from({ length: 10 }, (_, colIndex) => {
-                                const seat = screen.seats.find(seat => seat.row === rowIndex && seat.col === colIndex);
-                                return (
-                                    <Grid item key={colIndex}>
-                                        <Box
-                                            sx={{
-                                                width: '30px',
-                                                height: '30px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '4px',
-                                                backgroundColor:'#9e9e9e'
-                                            }}
-                                            id={`S${rowIndex * 10 + colIndex + 1}`}
-                                        >
-                                            {rowIndex * 10 + colIndex + 1}
-                                        </Box>
-                                    </Grid>
-                                )
-                            })}
-                        </Grid>
+                    {// For each row, create a row of seats
+                        Array.from({ length: rows }, (_, rowIndex) =>
+                            <Grid item container key={rowIndex} spacing={1} justifyContent="center" style={{ flexWrap: 'nowrap' }}>
+                                {Array.from({ length: cols }, (_, colIndex) => {
+                                    const currIndex = rowIndex * cols + colIndex;
+                                    console.log(screen.seats[currIndex]);
+                                    
+                                    return (
+                                        <Grid item key={colIndex}>
+                                            {screen.seats[currIndex].row !== null ?
+                                            <Box
+                                                sx={{
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    border: '1px solid #ccc',
+                                                    borderRadius: '4px',
+                                                    backgroundColor:'#111',
+                                                    padding: '5px',
+                                                    fontSize: '12px',
+                                                }}
+                                                id={`S${rowIndex * cols + colIndex + 1}`}
+                                            >
+                                                {screen.seats[currIndex].row}{screen.seats[currIndex].col}
+                                            </Box>
+                                            :
+                                            <Box
+                                                sx={{
+                                                    width: '30px',
+                                                    height: '30px',
+                                                }}
+                                                id={`S${rowIndex * cols + colIndex + 1}`}
+                                            >
+                                            </Box>
+                                            }
+                                        </Grid>
+                                    )
+                                })}
+                            </Grid>
 
-                    )}
+                        )}
                 </Grid>
             }
 
