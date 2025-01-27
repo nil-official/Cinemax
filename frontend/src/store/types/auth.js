@@ -1,0 +1,18 @@
+ const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+ const REGISTER_FAIL = 'REGISTER_FAIL';
+ const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+ const LOGIN_FAIL = 'LOGIN_FAIL';
+
+ const USER_LOADED = 'USER_LOADED';
+ const AUTH_ERROR = 'AUTH_ERROR';
+ const LOGOUT = 'LOGOUT';
+
+ export {
+        REGISTER_SUCCESS,
+        REGISTER_FAIL,
+        LOGIN_SUCCESS,
+        LOGIN_FAIL,
+        USER_LOADED,
+        AUTH_ERROR,
+        LOGOUT
+    };

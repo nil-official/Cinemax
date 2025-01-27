@@ -1,13 +1,18 @@
 import React from 'react';
 import { Menu, MenuItem, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const NavbarDropdown = ({ user, onLogout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
+  const navigate = useNavigate();
   const handleMenu = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
+  const handleLogin = () => {
+    navigate('/login');
+    // Navigate to login page
+  }
   return (
     <>
       <Button onClick={handleMenu} color="inherit">
@@ -22,7 +27,7 @@ const NavbarDropdown = ({ user, onLogout }) => {
         ) : (
           <>
             <MenuItem onClick={handleClose}>Sign Up</MenuItem>
-            <MenuItem onClick={handleClose}>Login</MenuItem>
+            <MenuItem onClick={handleLogin}>Login</MenuItem>
           </>
         )}
       </Menu>
