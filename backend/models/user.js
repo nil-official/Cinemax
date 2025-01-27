@@ -64,10 +64,10 @@ const userSchema = Schema(
       unique: true
     },
 
-    facebookId: {
-      type: String,
-      unique: true
-    },
+    // facebookId: {
+    //   type: String,
+    //   unique: true
+    // },
 
     phone: {
       type: String,
