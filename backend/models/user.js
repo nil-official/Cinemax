@@ -6,20 +6,28 @@ const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 const userSchema = Schema(
   {
-    name: {
+    firstName: {
       type: String,
       required: true,
       trim: true,
     },
-    username: {
+
+    lastName: {
       type: String,
-      unique: true,
       required: true,
       trim: true,
-      lowercase: true,
-      minlength: [3, 'Username must be at least 3 characters long'], //change
-      maxlength: [20, 'Username cannot exceed 20 characters'], //change
     },
+    
+    // username: {
+    //   type: String,
+    //   unique: true,
+    //   // required: true,
+    //   trim: true,
+    //   lowercase: true,
+    //   minlength: [3, 'Username must be at least 3 characters long'], //change
+    //   maxlength: [20, 'Username cannot exceed 20 characters'], //change
+    // },
+
     email: {
       type: String,
       unique: true,
@@ -32,8 +40,10 @@ const userSchema = Schema(
         }
       },
     },
+
     password: {
       type: String,
+      required: true,
       trim: true,
       minlength: 7,
       validate(value) {
@@ -42,14 +52,22 @@ const userSchema = Schema(
         }
       },
     },
+
     role: {
       type: String,
       default: 'guest',
       enum: ['guest', 'admin', 'superadmin'],
     },
 
-    facebook: String,
-    google: String,
+    googleId: {
+      type: String,
+      unique: true
+    },
+
+    facebookId: {
+      type: String,
+      unique: true
+    },
 
     phone: {
       type: String,
@@ -61,9 +79,11 @@ const userSchema = Schema(
         }
       },
     },
+
     imageurl: {
       type: String,
     },
+
     tokens: [
       {
         token: {
@@ -72,13 +92,14 @@ const userSchema = Schema(
         },
       },
     ],
+    
   },
   {
     timestamps: true,
   }
 );
 
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
   if (!userObject.role === 'superadmin') {
@@ -91,16 +112,29 @@ userSchema.methods.toJSON = function() {
   return userObject;
 };
 
-userSchema.methods.generateAuthToken = async function() {
+// userSchema.methods.generateAuthToken = async function () {
+//   const user = this;
+//   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
+//   user.tokens = user.tokens.concat({ token });
+//   await user.save();
+//   return token;
+// };
+userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, 'mySecret');
+  const tokenPayload = {
+    _id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+  const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
 };
 
-userSchema.statics.findByCredentials = async (username, password) => {
-  const user = await User.findOne({ username });
+userSchema.statics.findByCredentials = async (email, password) => {
+  const user = await User.findOne({ email });
   if (!user) throw new Error('Unable to login');
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -110,7 +144,7 @@ userSchema.statics.findByCredentials = async (username, password) => {
 };
 
 // Hash the plain text password before save
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);

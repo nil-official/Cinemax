@@ -1,5 +1,4 @@
 import "./App.css";
-import "./assets/fonts/OvercameDemoRegular.ttf";
 import React, { useState } from "react";
 import {
   BrowserRouter as Router,
@@ -20,6 +19,7 @@ import Showtimespage from "./pages/Showtimespage";
 import SeatLayoutpage from "./pages/SeatLayoutpage";
 import Testpage from "./pages/Testpage";
 import Login from "./pages/Login"
+import Register from "./pages/Register";
 
 
 const App = () => {
@@ -79,7 +79,7 @@ const App = () => {
           <Container>
             <Routes>
               <Route path="/login" element={<Login/>}/>
-              {/* <Route path="/register" element={<Register/>}/> */}
+              <Route path="/register" element={<Register/>}/>
               <Route element={<Layout />}>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/movie/:movieId" element={<Moviepage />} />

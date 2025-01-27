@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const passport = require("passport");
+require("./middlewares/passport");
+const cors = require("cors");
 const throttler = require('./utils/throttleMiddleware')
 
 // Routes
@@ -21,6 +24,10 @@ mongoose.connect(process.env.MONGODB_URI)
 .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
 });
+
+app.use(cors());
+// Initialize Passport
+app.use(passport.initialize());
 
 app.use(function(req, res, next) {
   // Website you wish to allow to connect
