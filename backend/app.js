@@ -5,13 +5,14 @@ const mongoose = require('mongoose');
 const throttler = require('./utils/throttleMiddleware')
 
 // Routes
+const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
 const showtimeRouter = require('./routes/showtimes');
 const screenRouter = require('./routes/screens');
 
 const app = express();
 app.disable('x-powered-by');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000
 
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
@@ -43,6 +44,7 @@ app.use(express.json());
 // comment this out to disable throttling
 // app.use(throttler);
 
+app.use(userRouter)
 app.use(movieRouter);
 app.use(showtimeRouter);
 app.use(screenRouter);

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Box, Typography, Divider } from '@mui/material';
 import WideMovieCard from '../components/WideMovieCard';
 import MovieCarousel from '../components/MovieCarousel/MovieCarousel';
-import { featuredMovie } from '../../data/movies';
+import { featuredMovie } from '../data/movies';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMovies } from '../store/actions/movies';
 
