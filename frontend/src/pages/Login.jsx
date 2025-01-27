@@ -153,7 +153,7 @@ const Login = () => {
                   <GoogleIcon style={{ fontSize: "24px" }} />
                 </Button>
               </Grid2>
-              <Grid2 xs={6}>
+              {/* <Grid2 xs={6}>
                 <Button
                   variant="outlined"
                   color="primary"
@@ -173,7 +173,7 @@ const Login = () => {
                 >
                   <FacebookIcon style={{ fontSize: "24px", color: "#3b5998" }} />
                 </Button>
-              </Grid2>
+              </Grid2> */}
             </Grid2>
 
             <Grid2 sx={{ marginTop: 3 }}>
