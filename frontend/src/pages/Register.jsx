@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 251, 251, 0.04)', // Semi-transparent background
+    backgroundColor: 'rgba(255, 251, 251, 0.04)',
     padding: theme.spacing(3),
     borderRadius: theme.shape.borderRadius,
     backdropFilter: 'blur(4px)',
@@ -56,12 +56,12 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const { isAuthenticated, error } = useSelector((state) => state.authState);
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate("/");
-  //   }
-  // }, [isAuthenticated, navigate]);
+  const { isAuthenticated, error } = useSelector((state) => state.authState);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -90,7 +90,7 @@ const Register = () => {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          {/* {error && <Typography color="error">{error}</Typography>} */}
+          {error && <Typography color="error">{error}</Typography>}
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <div style={{ display: "flex", gap: "5px" }}>
               <TextField

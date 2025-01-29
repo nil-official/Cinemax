@@ -5,7 +5,7 @@ import { LockOutlined } from "@mui/icons-material";
 import { makeStyles } from '@mui/styles';
 import { FcGoogle as GoogleIcon } from "react-icons/fc";
 import { FaFacebook as FacebookIcon } from "react-icons/fa";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from "../store/actions/auth";
 import backgroundImg from "../assets/bg.jpg"
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 251, 251, 0.04)', // Semi-transparent background
+    backgroundColor: 'rgba(255, 251, 251, 0.04)',
     padding: theme.spacing(3),
     borderRadius: theme.shape.borderRadius,
     backdropFilter: 'blur(4px)',
@@ -45,13 +45,13 @@ const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  // const { isAuthenticated } = useSelector((state) => state.authState);
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate("/");
-  //   }
-  // }, [isAuthenticated, navigate]);
+
+  const { isAuthenticated, error } = useSelector((state) => state.authState);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,7 +80,7 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          {/* {error && <Typography color="error">{error}</Typography>} */}
+          {error && <Typography color="error">{error}</Typography>}
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
