@@ -12,6 +12,17 @@ const getAllMovies = async (req, res) => {
     }
 }
 
+// Get movie by id
+const getMovieById = async (req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id);
+        res.status(200).json(movie);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ "error": "Internal server error" });
+    }
+};
+
 module.exports = {
-    getAllMovies,
+    getAllMovies, getMovieById,
 };

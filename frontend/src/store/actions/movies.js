@@ -2,6 +2,7 @@ import axios from "../../axiosConfig";
 import {
     SET_MOVIES,
     SELECT_MOVIE,
+    SET_STATUS,
     FETCH_MOVIES_PENDING,
     FETCH_MOVIES_FULFILLED,
     FETCH_MOVIES_REJECTED,
@@ -19,6 +20,11 @@ export const selectMovie = (movie) => ({
 });
 
 // for internal use only
+
+const setStatus = (status) => ({
+    type: SET_STATUS,
+    payload: status,
+});
 
 const fetchMoviesPending = () => ({
     type: FETCH_MOVIES_PENDING,
@@ -44,6 +50,20 @@ export const fetchMovies = () => {
         } catch (error) {
             // uncomment to see the error response structure of axios
             // console.log(error);
+            dispatch(fetchMoviesRejected(error.message));
+        }
+    };
+};
+
+// Async action to fetch a movie by id
+export const fetchMovieById = (movieId) => {
+    return async (dispatch) => {
+        dispatch(fetchMoviesPending());
+        try {
+            const response = await axios.get(`/movies/${movieId}`);
+            dispatch(selectMovie(response.data));
+            dispatch(setStatus('succeeded'));
+        } catch (error) {
             dispatch(fetchMoviesRejected(error.message));
         }
     };

@@ -1,6 +1,7 @@
 import {
     SET_MOVIES,
     SELECT_MOVIE,
+    SET_STATUS,
     FETCH_MOVIES_PENDING,
     FETCH_MOVIES_FULFILLED,
     FETCH_MOVIES_REJECTED
@@ -21,6 +22,8 @@ const reducer = (state = initialState, action) => {
             return { ...state, movies: action.payload };
         case SELECT_MOVIE:
             return { ...state, selectedMovie: action.payload };
+        case SET_STATUS:
+            return { ...state, status: action.payload };
         case FETCH_MOVIES_PENDING:
             return { ...state, status: 'loading' };
         case FETCH_MOVIES_FULFILLED:

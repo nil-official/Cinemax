@@ -15,12 +15,11 @@ import {
 import Navbar from "./components/Navbar/Navbar";
 import Homepage from "./pages/Homepage";
 import Moviepage from "./pages/Moviepage";
-import Showtimespage from "./pages/Showtimespage";
+import ShowtimesPage from "./pages/Showtimespage";
 import SeatLayoutpage from "./pages/SeatLayoutpage";
 import Testpage from "./pages/Testpage";
 import Login from "./pages/Login"
 import Register from "./pages/Register";
-
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -83,7 +82,7 @@ const App = () => {
               <Route element={<Layout />}>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/movie/:movieId" element={<Moviepage />} />
-                <Route path="/movie/:movieId/showtimes" element={<Showtimespage />}/>
+                <Route path="/movie/:movieId/showtimes" element={<ShowtimesPage />}/>
                 <Route path="/movie/:movieId/showtimes/:showtimeId/seatlayout" element={<SeatLayoutpage />}/>
                 <Route path="/test" element={<Testpage />} />
               </Route> 
