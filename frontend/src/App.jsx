@@ -20,6 +20,7 @@ import SeatLayoutpage from "./pages/SeatLayoutpage";
 import Testpage from "./pages/Testpage";
 import Login from "./pages/Login"
 import Register from "./pages/Register";
+import SeatPage from "./pages/SeatPage";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -77,15 +78,16 @@ const App = () => {
         >
           <Container>
             <Routes>
-              <Route path="/login" element={<Login/>}/>
-              <Route path="/register" element={<Register/>}/>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route element={<Layout />}>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/movie/:movieId" element={<Moviepage />} />
-                <Route path="/movie/:movieId/showtimes" element={<ShowtimesPage />}/>
-                <Route path="/movie/:movieId/showtimes/:showtimeId/seatlayout" element={<SeatLayoutpage />}/>
+                <Route path="/movie/:movieId/showtimes" element={<ShowtimesPage />} />
+                <Route path="/movie/:movieId/showtimes/:showtimeId/seatlayout" element={<SeatLayoutpage />} />
                 <Route path="/test" element={<Testpage />} />
-              </Route> 
+                <Route path="/seats" element={<SeatPage />} />
+              </Route>
             </Routes>
           </Container>
         </Container>

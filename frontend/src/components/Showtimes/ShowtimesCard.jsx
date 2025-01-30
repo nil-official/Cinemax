@@ -26,9 +26,9 @@ const ShowtimesCard = ({ showtimes }) => {
                 >
                     {/* Left Section: Theatre & Pricing */}
                     <Box>
-                        <Typography variant="h6" fontWeight="bold">
+                        {/* <Typography variant="h6" fontWeight="bold">
                             {showtimes._id}
-                        </Typography>
+                        </Typography> */}
                         <Typography variant="h6" fontWeight="bold">
                             {showtimes.screenId.name}
                         </Typography>
