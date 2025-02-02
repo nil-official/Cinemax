@@ -1,14 +1,24 @@
 /* Hide scrollbar for the horizontal scrolling menu */
 .react-horizontal-scrolling-menu--scroll-container {
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
-  }
-  
-  .react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
-  }
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
 
-  /* body{
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+/* body{
     background-color: #19152e;
     background-image: linear-gradient(0deg, rgba(9,7,16,1) 0%, rgba(15,12,24,1) 50%, rgba(9,7,16,1) 100%); 
   } */
+
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
