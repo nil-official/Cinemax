@@ -39,9 +39,9 @@ const movieSchema = new Schema({
     lowercase: true,
     validate: {
       validator: (value) => {
-        return value.length > 0;
+        return value.length > 1;
       },
-      message: 'Cast should have at least one member',
+      message: 'Cast should have at least two member',
     },
   },
   description: {
