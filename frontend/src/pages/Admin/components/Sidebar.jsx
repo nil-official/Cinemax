@@ -24,7 +24,8 @@ import {
   People,
   Settings,
   Logout,
-  Schedule // Import the Schedule icon
+  Schedule ,
+  Tv
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 
@@ -54,7 +55,8 @@ const Sidebar = () => {
   const menuItems = [
     { text: "Dashboard", icon: <Dashboard />, path: "/admin/dashboard" },
     { text: "Movies Management", icon: <LocalMovies />, path: "/admin/movies" },
-    { text: "Showtimes Management", icon: <Schedule />, path: "/admin/showtimes" }, // New menu item
+    { text: "Screens Management", icon: <Tv/>, path: "/admin/screens" }, // New menu item
+    { text: "SHowtimes Management", icon: <Schedule />, path: "/admin/showtimes" }, // New menu item
     { text: "Users", icon: <People />, path: "/admin/users" },
     { text: "Settings", icon: <Settings />, path: "/admin/settings" },
   ];

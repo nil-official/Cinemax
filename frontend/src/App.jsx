@@ -23,8 +23,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SeatPage from "./pages/SeatPage";
 import Sidebar from "./pages/Admin/components/Sidebar";
-import MoviesList from "./pages/Admin/movies/MoviesList";
+import MoviesList from "./pages/Admin/Movies/MoviesList";
 import AddMovie from "./pages/Admin/Movies/AddMovie";
+import ScreenList from "./pages/Admin/screens/ScreensList";
+import AddScreen from "./pages/Admin/screens/AddScreen";
 import { Toaster } from "react-hot-toast";
 
 
@@ -113,6 +115,11 @@ const App = () => {
               <Route path="/admin/movies" element={<MoviesList />} />
               <Route path="/admin/movies/add" element={<AddMovie />} />
               <Route path="/admin/movies/edit/:id" element={<AddMovie />} />
+              {/* Screens Route */}
+              <Route path="/admin/screens" element={<ScreenList/>}/>
+              <Route path="/admin/screens/add" element={<AddScreen/>}/>
+              <Route path="/admin/screens/edit/:id" element={<AddScreen/>}/>
+
             </Route>
           </Routes>
         </Container>
