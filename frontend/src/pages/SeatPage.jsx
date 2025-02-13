@@ -5,13 +5,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchScreen, selectSeats } from "../store/actions/screens";
 import { fetchShowtimeById } from "../store/actions/showtimes";
+import { fetchBookedSeats } from "../store/actions/bookings";
 
 const SeatPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const { movieId, showtimeId } = useParams();
     const { screen, status, error } = useSelector((state) => state.screenState);
     const { selectedShowtime } = useSelector((state) => state.showtimeState);
+    const { bookedSeats, loading } = useSelector((state) => state.bookingState);
+
+    // console.log(selectedShowtime);
+
 
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [seatLimit, setSeatLimit] = useState(1);
@@ -24,8 +30,13 @@ const SeatPage = () => {
 
 
     useEffect(() => {
-        console.log("SeatPage useEffect");
-    }, []);
+        // console.log("SeatPage useEffect");
+        dispatch(fetchBookedSeats(showtimeId, selectedShowtime.screenId._id));
+    }, [dispatch, showtimeId, selectedShowtime]);
+
+    useEffect(() => {
+        // console.log("Booked seats: ", bookedSeats);
+    }, [bookedSeats]);
 
     // Reloading the page
     useEffect(() => {
@@ -63,7 +74,13 @@ const SeatPage = () => {
 
     // Check if seat is already booked
     const isSeatBooked = (row, seat) => {
-        const bookedRow = seatData.bookedSeats.find((r) => r.row === row);
+        let seatsArray = Array.isArray(bookedSeats)
+            ? bookedSeats
+            : Object.values(bookedSeats);
+        if (Array.isArray(seatsArray[0])) {
+            seatsArray = seatsArray.flat();
+        }
+        const bookedRow = seatsArray.find((r) => r.row === row);
         return bookedRow ? bookedRow.seats.includes(seat) : false;
     };
 

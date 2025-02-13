@@ -7,6 +7,9 @@ import {
     FETCH_BOOKINGS_PENDING,
     FETCH_BOOKINGS_FULFILLED,
     FETCH_BOOKINGS_REJECTED,
+    FETCH_BOOKED_SEATS_PENDING,
+    FETCH_BOOKED_SEATS_FULFILLED,
+    FETCH_BOOKED_SEATS_REJECTED,
 } from '../types/bookings';
 
 // Action creators
@@ -34,6 +37,20 @@ const fetchBookingsFulfilled = (bookings) => ({
 
 const fetchBookingsRejected = (error) => ({
     type: FETCH_BOOKINGS_REJECTED,
+    payload: error,
+});
+
+const fetchBookedSeatsPending = () => ({
+    type: FETCH_BOOKED_SEATS_PENDING,
+});
+
+const fetchBookedSeatsFulfilled = (bookedSeats) => ({
+    type: FETCH_BOOKED_SEATS_FULFILLED,
+    payload: bookedSeats,
+});
+
+const fetchBookedSeatsRejected = (error) => ({
+    type: FETCH_BOOKED_SEATS_REJECTED,
     payload: error,
 });
 
@@ -77,7 +94,7 @@ export const createBooking = (bookingData) => {
                                 movie: bookingData.movie,
                                 totalPrice: bookingData.amount,
                             });
-                            
+
                         } else {
                             alert("Payment verification failed. Please try again.");
                         }
@@ -100,3 +117,16 @@ export const createBooking = (bookingData) => {
         }
     };
 };
+
+export const fetchBookedSeats = (showtimeId, screenId) => {
+    return async (dispatch) => {
+        dispatch(fetchBookedSeatsPending());
+        try {
+            const response = await axios.get(`/bookings/showtime/${showtimeId}/screen/${screenId}`);
+            // console.log("booked seats from action",response.data.data);
+            dispatch(fetchBookedSeatsFulfilled(response.data.data));
+        } catch (error) {
+            dispatch(fetchBookedSeatsRejected(error.message));
+        }
+    };
+}

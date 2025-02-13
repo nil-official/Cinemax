@@ -5,11 +5,15 @@ import {
     FETCH_BOOKINGS_PENDING,
     FETCH_BOOKINGS_FULFILLED,
     FETCH_BOOKINGS_REJECTED,
+    FETCH_BOOKED_SEATS_PENDING,
+    FETCH_BOOKED_SEATS_FULFILLED,
+    FETCH_BOOKED_SEATS_REJECTED,
 } from '../types/bookings';
 
 // Initial state
 const initialState = {
     bookings: [],
+    bookedSeats: [],
     loading: false,
     error: null,
 };
@@ -28,6 +32,12 @@ const reducer = (state = initialState, action) => {
         case CREATE_BOOKING_FULFILLED:
             return { ...state, loading: false };
         case CREATE_BOOKING_REJECTED:
+            return { ...state, loading: false, error: action.payload };
+        case FETCH_BOOKED_SEATS_PENDING:
+            return { ...state, loading: true };
+        case FETCH_BOOKED_SEATS_FULFILLED:
+            return { ...state, loading: false, bookedSeats: action.payload };
+        case FETCH_BOOKED_SEATS_REJECTED:
             return { ...state, loading: false, error: action.payload };
         default:
             return state;

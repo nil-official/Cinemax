@@ -25,7 +25,7 @@ const ShowtimesCard = ({ category, showtimes, movieId, showtime }) => {
     const handleShowtimeSelect = (show) => {
         dispatch(selectShowtime(show))
             .then(() => {
-                console.log("Showtime selected: ", show);
+                // console.log("Showtime selected: ", show);
                 navigate(`/movie/${movieId}/showtimes/${show._id}/seatlayout`)
             });
     }
