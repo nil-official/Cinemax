@@ -18,19 +18,37 @@ const ShowtimesPage = () => {
     const [dates, setDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [scrollIndex, setScrollIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     const isMobile = useMediaQuery('(max-width:600px)');
 
     useEffect(() => {
+        console.log("Showtime useEffect");
+    }, []);
+
+    useEffect(() => {
         if (status === "idle") {
-            setLoading(true); // Set loading to true when fetching starts
-            dispatch(fetchShowtimes(movieId))
-                .then(() => setLoading(false)) // Set loading to false when fetching completes
-                .catch(() => setLoading(false)); // Handle errors
+            console.log("Idle state.....");
+            // setLoading(true); // Set loading to true when fetching starts
+            dispatch(fetchShowtimes(movieId));
+            // .then(() => setLoading(false)) // Set loading to false when fetching completes
+            // .catch(() => setLoading(false)); // Handle errors
             dispatch(fetchMovieById(movieId));
         }
     }, [status, dispatch, movieId]);
+
+    useEffect(() => {
+        if (status === "loading") {
+            console.log("Loading state.....");
+        }
+    }, [status]);
+
+    useEffect(() => {
+        if (status === "succeeded") {
+            // setLoading(false);
+            console.log("Succeeded state.....");
+        }
+    }, [status]);
 
     useEffect(() => {
         const now = new Date();
@@ -59,7 +77,7 @@ const ShowtimesPage = () => {
 
     return (
         <Container maxWidth="lg" sx={{ minHeight: '100vh', mt: 4, mb: 4 }}>
-            {loading ? (
+            {status === 'loading' ? (
                 <Box>
                     <Box>
                         <Typography variant={isMobile ? "h5" : "h4"} sx={{ pt: 3, fontWeight: 'bold' }}>
@@ -93,7 +111,7 @@ const ShowtimesPage = () => {
                         </Box>
                     </Box>
                 </Box>
-            ) : (
+            ) : (selectedMovie &&
                 <Box>
                     <Box>
                         <Typography variant={isMobile ? "h5" : "h4"} sx={{ pt: 3, fontWeight: 'bold' }}>

@@ -9,10 +9,10 @@ import {
 } from '../types/auth';
 
 const initialState = {
-  token: localStorage.getItem('jwtToken'),
+  token: localStorage.getItem('user')?.token,
   isAuthenticated: null,
   loading: true,
-  user: null
+  user: null,
 };
 
 export default (state = initialState, action) => {
@@ -21,15 +21,15 @@ export default (state = initialState, action) => {
     case USER_LOADED:
       return { ...state, user: payload, isAuthenticated: true, loading: false };
     case REGISTER_SUCCESS:
+      return { ...state, ...payload, user: payload.data.user, isAuthenticated: true, loading: false };
     case LOGIN_SUCCESS:
-      localStorage.setItem('jwtToken', payload.token);
-      return { ...state, ...payload, isAuthenticated: true, loading: false };
+      return { ...state, ...payload, user: payload.data.user, isAuthenticated: true, loading: false };
     case REGISTER_FAIL:
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case LOGOUT:
-      localStorage.removeItem('jwtToken');
-      return initialState;
+      localStorage.removeItem('code');
+      return { ...state, token: null, isAuthenticated: false, loading: false, user: null };
     default:
       return state;
   }

@@ -2,29 +2,59 @@ const { Schema, model } = require('mongoose');
 
 const screenSchema = new Schema({
     name: {
-        type: String, 
-        enum:["2D", "3D", "IMAX 3D"], 
+        type: String,
         required: true
     },
-    seats: [{
-        type: Schema.Types.Mixed,
-        required: true
+    layout: [{
+        category: {
+            type: String,
+            required: true
+        },
+        price: {
+            type: Number,
+            required: true
+        },
+        rows: [{
+            row: {
+                type: String,
+                required: true
+            },
+            seats: [{
+                type: String
+            }]
+        }]
     }],
-	seatCount: {        
-        type: Number,                   
-        required: true
-    },
-	gridCount: {        
-        type: Number,                   
-        required: true
-    },
-    price: {        
-        type: Number,                   
-        required: true
-    }
-}, {timestamps: true});
+});
 
 module.exports = model('Screen', screenSchema);
+
+// const { Schema, model } = require('mongoose');
+
+// const screenSchema = new Schema({
+//     name: {
+//         type: String,
+//         enum:["2D", "3D", "IMAX 3D"],
+//         required: true
+//     },
+//     seats: [{
+//         type: Schema.Types.Mixed,
+//         required: true
+//     }],
+// 	seatCount: {
+//         type: Number,
+//         required: true
+//     },
+// 	gridCount: {
+//         type: Number,
+//         required: true
+//     },
+//     price: {
+//         type: Number,
+//         required: true
+//     }
+// }, {timestamps: true});
+
+// module.exports = model('Screen', screenSchema);
 
 /**
  * Seats are stored as an array of mixed type. This is because each seat can be of different type.

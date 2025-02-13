@@ -1,4 +1,4 @@
-const Showtime = require('../models/showtime');
+const Showtime = require('../models/showtimeSchema');
 
 // Get all showtimes by movie id
 const getShowtimesByMovieId = async (req, res) => {
@@ -10,7 +10,7 @@ const getShowtimesByMovieId = async (req, res) => {
             })
             .populate({
                 path: 'screenId',
-                select: 'name price'
+                select: 'name'
             })
         res.status(200).json(showtimes);
     } catch (error) {
@@ -19,6 +19,21 @@ const getShowtimesByMovieId = async (req, res) => {
     }
 };
 
+const getShowtimeById = async (req, res) => {
+    try {
+        const showtime = await Showtime.findById(req.params.showtimeId)
+            .populate({
+                path: 'screenId',
+                select: 'name'
+            })
+        res.status(200).json(showtime);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ "error": "Internal server error" });
+    }
+};
+
 module.exports = {
-    getShowtimesByMovieId
+    getShowtimesByMovieId,
+    getShowtimeById,
 };

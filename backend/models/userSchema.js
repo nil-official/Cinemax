@@ -2,102 +2,64 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
 const { Schema } = mongoose;
-const userSchema = Schema(
-  {
-    firstName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
 
-    lastName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    
-    // username: {
-    //   type: String,
-    //   unique: true,
-    //   // required: true,
-    //   trim: true,
-    //   lowercase: true,
-    //   minlength: [3, 'Username must be at least 3 characters long'], //change
-    //   maxlength: [20, 'Username cannot exceed 20 characters'], //change
-    // },
-
-    email: {
-      type: String,
-      unique: true,
-      required: true,
-      trim: true,
-      lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error('Email is invalid');
-        }
-      },
-    },
-
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 7,
-      validate(value) {
-        if (value.toLowerCase().includes('password')) {
-          throw new Error('Password should not contain word: password');
-        }
-      },
-    },
-
-    role: {
-      type: String,
-      default: 'guest',
-      enum: ['guest', 'admin', 'superadmin'],
-    },
-
-    googleId: {
-      type: String,
-      unique: true
-    },
-
-    // facebookId: {
-    //   type: String,
-    //   unique: true
-    // },
-
-    phone: {
-      type: String,
-      unique: true,
-      trim: true,
-      validate(value) {
-        if (!validator.isMobilePhone(value)) {
-          throw new Error('Phone is invalid');
-        }
-      },
-    },
-
-    imageurl: {
-      type: String,
-    },
-
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
-    
+const userSchema = Schema({
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error('Email is invalid');
+      }
+    },
+  },
+  password: {
+    type: String,
+    trim: true,
+    minlength: 7,
+    validate(value) {
+      if (value.toLowerCase().includes('password')) {
+        throw new Error('Password should not contain word: password');
+      }
+    },
+  },
+  avatar: {
+    type: String,
+  },
+  role: {
+    type: String,
+    default: 'guest',
+    enum: ['guest', 'admin', 'superadmin'],
+  },
+  phone: {
+    type: String,
+    trim: true,
+    validate(value) {
+      if (!validator.isMobilePhone(value)) {
+        throw new Error('Phone no is invalid');
+      }
+    },
+  },
+  tokens: [{
+    token: {
+      type: String,
+      required: true,
+    },
+  }],
+}, { timestamps: true, });
 
 userSchema.methods.toJSON = function () {
   const user = this;

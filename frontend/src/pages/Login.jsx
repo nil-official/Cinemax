@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from "../store/actions/auth";
 import backgroundImg from "../assets/bg.jpg"
+import GoogleLogin from "../components/Google/GoogleLogin";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -133,47 +134,8 @@ const Login = () => {
             </Typography>
             <Grid2 container spacing={2} style={{ marginTop: '16px', justifyContent: 'center' }}>
               <Grid2 xs={6}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#fff",
-                    borderColor: "#fff",
-                    padding: "10px",
-                    "&:hover": {
-                      borderColor: "#fff",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    },
-                  }}
-                  onClick={handleGoogleLogin}
-                >
-                  <GoogleIcon style={{ fontSize: "24px" }} />
-                </Button>
+                <GoogleLogin />
               </Grid2>
-              {/* <Grid2 xs={6}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#fff",
-                    borderColor: "#fff",
-                    padding: "10px",
-                    "&:hover": {
-                      borderColor: "#fff",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    },
-                  }}
-                  onClick={handleFacebookLogin}
-                >
-                  <FacebookIcon style={{ fontSize: "24px", color: "#3b5998" }} />
-                </Button>
-              </Grid2> */}
             </Grid2>
 
             <Grid2 sx={{ marginTop: 3 }}>
