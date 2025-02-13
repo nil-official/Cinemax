@@ -34,19 +34,20 @@ const ScreenList = () => {
       const response = await axios.get('/screens');
       setScreens(response.data);
     } catch (error) {
-      toast.error('Error fetching screens: ' + error.message);
+      toast.error('Error fetching screens: ' );
     } finally {
       setLoading(false);
     }
   };
 
   const deleteScreen = async (screenId) => {
+
     try {
       const response = await axios.delete(`/screens/${screenId}`);
       setScreens((prevScreens) => prevScreens.filter(screen => screen._id !== screenId));
       toast.success("Screen deleted successfully");
     } catch (error) {
-      toast.error('Error deleting screen: ' + error.message);
+      toast.error('Error deleting screen: ');
     }
   };
 

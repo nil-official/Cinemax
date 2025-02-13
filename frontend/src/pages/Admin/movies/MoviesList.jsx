@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Add, Edit, Delete } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
-import PaginationComponent from '../../../utils/PaginationComponent';
+import PaginationComponent from '../../../components/PaginationComponent';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
