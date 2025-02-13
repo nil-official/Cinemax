@@ -46,6 +46,7 @@ export const fetchMovies = () => {
         dispatch(fetchMoviesPending());
         try {
             const response = await axios.get('/movies'); 
+            console.log(response.data);
             dispatch(fetchMoviesFulfilled(response.data));
         } catch (error) {
             // uncomment to see the error response structure of axios

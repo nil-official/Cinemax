@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBookings } from "../store/actions/bookings";
 import { format } from 'date-fns';
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Card,
@@ -21,6 +22,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import QRCode from "react-qr-code";
+import PaginationComponent from "../components/Pagination/PaginationComponent";
 
 const Bookings = () => {
 
@@ -33,9 +35,17 @@ const Bookings = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
+  const bookingsPerPage = 3;
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
+    console.log("Fetching bookings...");
     dispatch(fetchBookings());
+    console.log("Bookings fetched!");
   }, [dispatch]);
+
+  console.log("Bookings now: ", bookings);
+
 
   const handleOpenDialog = (booking) => {
     setSelectedBooking(booking);
@@ -45,6 +55,16 @@ const Bookings = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedBooking(null);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const getCurrentBookings = () => {
+    const indexOfLastBooking = currentPage * bookingsPerPage;
+    const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
+    return bookings.slice(indexOfFirstBooking, indexOfLastBooking);
   };
 
   return (
@@ -57,7 +77,8 @@ const Bookings = () => {
         <CircularProgress />
       ) : (
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
-          {bookings?.map((booking) => (
+          {/* {bookings && bookings?.map((booking) => ( */}
+          {getCurrentBookings().map((booking) => (
             <Grid2 container key={booking._id} sx={{ width: "100%" }}>
               <Card sx={{
                 display: isMobile ? "block" : "flex",
@@ -127,6 +148,13 @@ const Bookings = () => {
           ))}
         </Box>
       )}
+
+      <PaginationComponent
+        totalItems={bookings.length}
+        itemsPerPage={bookingsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
 
       {/* Dialog Box for QR Ticket */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>

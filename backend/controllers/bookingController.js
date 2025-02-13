@@ -21,7 +21,7 @@ const createBooking = async (req, res) => {
             data: { booking },
         });
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             status: 'error',
             message: error.message,
         });
@@ -62,8 +62,41 @@ const getAllBookings = async (req, res) => {
     }
 }
 
+const getBookedSeats = async (req, res) => {
+    const { showtimeId, screenId } = req.params;
+    try {
+        const bookings = await Booking.find({
+            'showtime._id': showtimeId,
+            'showtime.screenId._id': screenId
+        });
+        const bookedSeats = bookings.reduce((acc, booking) => {
+            booking.bookedSeats.forEach(seat => {
+                const existingRow = acc.find(row => row.row === seat.row);
+                if (existingRow) {
+                    existingRow.seats.push(...seat.seats);
+                } else {
+                    acc.push({ row: seat.row, seats: [...seat.seats] });
+                }
+            });
+            return acc;
+        }, []);
+        res.status(200).json({
+            status: 'success',
+            message: 'Booked seats fetched successfully',
+            data: { bookedSeats },
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching booked seats',
+        });
+    }
+}
+
 module.exports = {
     createBooking,
     getUserBookings,
     getAllBookings,
+    getBookedSeats,
 };
