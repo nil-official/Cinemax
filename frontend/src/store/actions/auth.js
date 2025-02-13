@@ -14,48 +14,70 @@ import { setUser, removeUser, isLoggedIn } from '../../utils/auth';
 // Login user
 export const login = (email, password) => async dispatch => {
   try {
-    const response = await axios.post('/login', { email, password });
-    console.log(response);
-    const responseData = await response.data;
-
+    const response = await axios.post('/auth/login', { email, password });
     if (response.status === 200) {
-      const { user } = responseData;
-      if (user) {
-        setUser(user);
+      const userData = {
+        user: response.data.data.user,
+        token: response.data.token,
+        expiresIn: response.data.expiresIn,
       }
-      dispatch({ type: LOGIN_SUCCESS, payload: responseData, });
-      // dispatch(setAlert(`Welcome ${user.name}`, "success", 5000));
+      if (userData) {
+        setUser(userData);
+      }
+      dispatch({ type: LOGIN_SUCCESS, payload: response.data, });
     }
-
   } catch (error) {
     dispatch({ type: LOGIN_FAIL });
-    // dispatch(setAlert(error.message, 'error', 5000));
-    console.log('Login Failed: ', error);
   }
 };
 
 // Register user
-export const register = ({ firstName, lastName, email, password, image }) => async (dispatch) => {
+export const register = ({ firstName, lastName, email, password }) => async (dispatch) => {
   try {
-    const response = await axios.post('/register', {
+    const response = await axios.post('/auth/register', {
       firstName,
       lastName,
       email,
       password,
     });
-    const responseData = response.data;
-
     if (response.status === 201) {
-      const { user } = responseData;
-      if (user) {
-        setUser(user);
+      const userData = {
+        user: response.data.data.user,
+        token: response.data.token,
+        expiresIn: response.data.expiresIn,
       }
-      dispatch({ type: REGISTER_SUCCESS, payload: responseData, });
-      // dispatch(setAlert('Register Success', 'success', 5000));
+      if (userData) {
+        setUser(userData);
+      }
+      dispatch({ type: REGISTER_SUCCESS, payload: response.data, });
     }
   } catch (error) {
     dispatch({ type: REGISTER_FAIL });
-    // dispatch(setAlert(error.message, 'error', 5000));
-    console.log('Register Failed: ', error);
   }
+};
+
+// Google authentication
+export const googleAuth = (authResult) => async (dispatch) => {
+  try {
+    const { code } = authResult;
+    const response = await axios.get(`/auth/google?code=${code}`);
+    if (response.status === 200) {
+      const userData = {
+        user: response.data.data.user,
+        token: response.data.token,
+        expiresIn: response.data.expiresIn,
+      }
+      if (userData) {
+        setUser(userData);
+      }
+      dispatch({ type: LOGIN_SUCCESS, payload: response.data, });
+    }
+  } catch (error) {
+    dispatch({ type: LOGIN_FAIL });
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  removeUser();
+  dispatch({ type: LOGOUT });
 };

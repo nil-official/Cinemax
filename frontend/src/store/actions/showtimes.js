@@ -9,10 +9,16 @@ import {
 } from '../types/showtimes';
 
 // Action creators
-export const selectShowtime = (showtime) => ({
-    type: SELECT_SHOWTIME,
-    payload: showtime,
-});
+// export const selectShowtime = (showtime) => ({
+//     type: SELECT_SHOWTIME,
+//     payload: showtime,
+// });
+export const selectShowtime = (showtime) => (dispatch) => {
+    return new Promise((resolve) => {
+        dispatch({ type: SELECT_SHOWTIME, payload: showtime });
+        resolve(); // Ensure dispatch completes before resolving
+    });
+};
 
 export const resetShowtimes = () => ({
     type: RESET_SHOWTIMES
@@ -39,8 +45,22 @@ export const fetchShowtimes = (movieId) => {
     return async (dispatch) => {
         dispatch(fetchShowtimesPending());
         try {
-            const response = await axios.get(`/showtime/${movieId}`); 
+            const response = await axios.get(`/showtimes/${movieId}`); 
             dispatch(fetchShowtimesFulfilled(response.data));
+        } catch (error) {
+            // uncomment to see the error response structure of axios
+            // console.log(error);
+            dispatch(fetchShowtimesRejected(error.message));
+        }
+    };
+};
+
+export const fetchShowtimeById = (showtimeId) => {
+    return async (dispatch) => {
+        dispatch(fetchShowtimesPending());
+        try {
+            const response = await axios.get(`/showtimes/id/${showtimeId}`);
+            dispatch(selectShowtime(response.data));
         } catch (error) {
             // uncomment to see the error response structure of axios
             // console.log(error);

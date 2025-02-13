@@ -3,6 +3,8 @@ import { Box, Typography, Button, Grid2, Select, MenuItem, Skeleton, useMediaQue
 import { seatData } from "../../data/screen1";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchScreen, selectSeats } from "../store/actions/screens";
+import { fetchShowtimeById } from "../store/actions/showtimes";
 
 const SeatPage = () => {
     const navigate = useNavigate();
@@ -13,30 +15,38 @@ const SeatPage = () => {
 
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [seatLimit, setSeatLimit] = useState(1);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [totalPrice, setTotalPrice] = useState(0);
     const [showPayButton, setShowPayButton] = useState(false);
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-    // useEffect(() => {
-    //     if (status === 'idle') {
-    //         dispatch(fetchScreen(selectedShowtime.screenId));
-    //     }
-    // }, [status, dispatch]);
 
-    // Simulate loading
     useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 1000);
-        return () => clearTimeout(timer);
+        console.log("SeatPage useEffect");
     }, []);
+
+    // Reloading the page
+    useEffect(() => {
+        if (!selectedShowtime) {
+            dispatch(fetchShowtimeById(showtimeId));
+        }
+    }, [dispatch, selectedShowtime]);
+
+    // Fetch screen details
+    useEffect(() => {
+        if (status === 'idle' && selectedShowtime) {
+            dispatch(fetchScreen(selectedShowtime.screenId._id));
+            // .then(() => setLoading(false));
+        }
+    }, [status, dispatch, selectedShowtime]);
 
     // Handle show pay now button
     useEffect(() => {
         let totalCost = 0;
         selectedSeats.forEach(({ row, seats }) => {
-            seatData.layout.forEach(category => {
+            screen.layout.forEach(category => {
                 if (category.rows.some(r => r.row === row)) {
                     totalCost += seats.length * category.price;
                 }
@@ -89,9 +99,10 @@ const SeatPage = () => {
         setSelectedSeats([]);
     };
 
-    // Handle payment
-    const handlePayment = () => {
-        console.log("Payment Initiated");
+    // Handle book now
+    const handleBookNow = () => {
+        dispatch(selectSeats(selectedSeats));
+        navigate('/booking/summary');
     }
 
     return (
@@ -108,8 +119,8 @@ const SeatPage = () => {
                     </Select>
                 </Box>
             </Box>
-            {loading ? (
-                seatData.layout.map((section, index) => (
+            {status === 'loading' ? (
+                screen?.layout.map((section, index) => (
                     <Box key={index} sx={{
                         mb: 2,
                         width: { xs: '100%', sm: 'auto' },
@@ -136,7 +147,7 @@ const SeatPage = () => {
                     </Box>
                 ))
             ) : (
-                seatData.layout.map((section, index) => (
+                screen && screen.layout.map((section, index) => (
                     <Box key={index} sx={{
                         mb: 2,
                         width: { xs: '100%', sm: 'auto' },
@@ -196,9 +207,9 @@ const SeatPage = () => {
                 }} >
                     <Button variant="outlined"
                         sx={{ minWidth: isMobile ? 300 : 200, fontSize: "16px", borderRadius: "8px", color: "white", py: 1 }}
-                        onClick={handlePayment}
+                        onClick={handleBookNow}
                     >
-                        Pay Rs.{totalPrice}
+                        Book Now
                     </Button>
                 </Box>
             </Slide >

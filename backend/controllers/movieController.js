@@ -1,4 +1,4 @@
-const Movie = require("../models/movie");
+const Movie = require("../models/movieSchema");
 
 // split this controller into 'nowShowing' and 'upcoming' controllers
 // make this controller for admin only

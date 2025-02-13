@@ -39,9 +39,9 @@ const MovieCarouselCard = ({ movie, theme }) => {
                 {/* {movie.title.length > 15 ? `${movie.title.substring(0, 15)}...` : movie.title} */}
                 {movie.title}
             </Typography>
-            <Typography sx={{ margin: '0 8px', fontSize: '14px', color: theme.palette.text.secondary }}>
+            {/* <Typography sx={{ margin: '0 8px', fontSize: '14px', color: theme.palette.text.secondary }}>
                 {movie.genre.length > 15 ? `${movie.genre.substring(0, 15)}...` : movie.genre}
-            </Typography>
+            </Typography> */}
         </Box>
     )
 }

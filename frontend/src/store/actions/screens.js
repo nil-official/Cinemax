@@ -3,7 +3,8 @@ import {
     FETCH_SCREEN_PENDING,
     FETCH_SCREEN_FULFILLED,
     FETCH_SCREEN_REJECTED,
-    RESET_SCREEN
+    RESET_SCREEN,
+    SET_SELECTED_SEATS
 } from '../types/screens';
 
 // Action creators
@@ -26,12 +27,17 @@ const fetchScreenRejected = (error) => ({
     payload: error,
 });
 
+export const selectSeats = (selectedSeats) => ({
+    type: SET_SELECTED_SEATS,
+    payload: selectedSeats
+});
+
 // Async action to fetch Screens
 export const fetchScreen = (screenId) => {
     return async (dispatch) => {
         dispatch(fetchScreenPending());
         try {
-            const response = await axios.get(`/screen/${screenId}`); 
+            const response = await axios.get(`/screens/${screenId}`);
             dispatch(fetchScreenFulfilled(response.data));
         } catch (error) {
             // uncomment to see the error response structure of axios

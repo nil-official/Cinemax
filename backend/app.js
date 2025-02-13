@@ -2,34 +2,33 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const passport = require("passport");
-require("./middlewares/passport");
 const cors = require("cors");
 const throttler = require('./utils/throttleMiddleware')
 
 // Routes
-const userRouter = require('./routes/users');
-const movieRouter = require('./routes/movies');
-const showtimeRouter = require('./routes/showtimes');
-const screenRouter = require('./routes/screens');
+const authRouter = require('./routes/authRoutes');
+const userRouter = require('./routes/userRoutes');
+const movieRouter = require('./routes/movieRoutes');
+const showtimeRouter = require('./routes/showtimeRoutes');
+const screenRouter = require('./routes/screenRoutes');
+const paymentRouter = require('./routes/paymentRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 
 const app = express();
 app.disable('x-powered-by');
 const port = process.env.PORT || 3000
 
 mongoose.connect(process.env.MONGODB_URI)
-.then(() => {
+  .then(() => {
     console.log('Successfully connected to MongoDB');
-})
-.catch((error) => {
+  })
+  .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
-});
+  });
 
 app.use(cors());
-// Initialize Passport
-app.use(passport.initialize());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -51,9 +50,12 @@ app.use(express.json());
 // comment this out to disable throttling
 // app.use(throttler);
 
-app.use(userRouter)
-app.use(movieRouter);
-app.use(showtimeRouter);
-app.use(screenRouter);
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
+app.use('/movies', movieRouter);
+app.use('/showtimes', showtimeRouter);
+app.use('/screens', screenRouter);
+app.use('/payments', paymentRouter);
+app.use('/bookings', bookingRouter);
 
 app.listen(port, () => console.log(`app is running in PORT: ${port}`));

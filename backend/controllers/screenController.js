@@ -1,4 +1,4 @@
-const Screen = require('../models/screen');
+const Screen = require('../models/screenSchema');
 
 // Get screen by id
 const getScreenById = async (req, res) => {
@@ -11,6 +11,17 @@ const getScreenById = async (req, res) => {
     }
 }
 
+const createScreen = async (req, res) => {
+    try {
+        const screen = await Screen.create(req.body);
+        res.status(201).json(screen);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ "error" : "Internal server error" });
+    }
+}
+
 module.exports = {
-    getScreenById
+    getScreenById,
+    createScreen,
 }

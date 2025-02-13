@@ -13,11 +13,11 @@ import Container from "@mui/material/Container";
 import { useSelector, useDispatch } from "react-redux";
 import { register } from "../store/actions/auth";
 import { useNavigate } from "react-router-dom";
-import backgroundImg from "../assets/bg.jpg"
+import GoogleLogin from "../components/Google/GoogleLogin";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    // marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -150,11 +150,27 @@ const Register = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              style={{ margin: '30px 0' }}
+              style={{ marginTop: '30px', marginBottom: '10px', padding: "10px" }}
             >
               Sign Up
             </Button>
-            <Grid2 container justifyContent="flex-end">
+
+            {/* Google and Facebook Signin */}
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              align="center"
+              sx={{ marginTop: 1 }}
+            >
+              Other sign up options
+            </Typography>
+            <Grid2 container spacing={2} style={{ marginTop: '16px', justifyContent: 'center' }}>
+              <Grid2 xs={6}>
+                <GoogleLogin />
+              </Grid2>
+            </Grid2>
+
+            <Grid2 container justifyContent="center" marginTop={3}>
               <Typography
                 variant="body2"
                 color="textSecondary"

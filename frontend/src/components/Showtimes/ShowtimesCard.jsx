@@ -16,14 +16,18 @@ const ShowtimesCard = ({ category, showtimes, movieId, showtime }) => {
     //     console.log("Showtime Clicked");
     //     navigate(`/movie/${movieId}/showtimes/${showtime._id}/seatlayout`);
     // };
-    useEffect(() => {
-        if (showtime) {
-            navigate(`/movie/${movieId}/showtimes/${showtime._id}/seatlayout`);
-        }
-    }, [showtime, navigate, movieId]);
+    // useEffect(() => {
+    //     if (showtime) {
+    //         navigate(`/movie/${movieId}/showtimes/${showtime._id}/seatlayout`);
+    //     }
+    // }, [showtime, navigate, movieId]);
 
     const handleShowtimeSelect = (show) => {
-        dispatch(selectShowtime(show));
+        dispatch(selectShowtime(show))
+            .then(() => {
+                console.log("Showtime selected: ", show);
+                navigate(`/movie/${movieId}/showtimes/${show._id}/seatlayout`)
+            });
     }
 
     return (
