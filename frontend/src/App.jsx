@@ -11,6 +11,7 @@ import {
   createTheme,
   CssBaseline,
   Container,
+  Box,
 } from "@mui/material";
 import Navbar from "./components/Navbar/Navbar";
 import Homepage from "./pages/Homepage";
@@ -18,30 +19,35 @@ import Moviepage from "./pages/Moviepage";
 import ShowtimesPage from "./pages/Showtimespage";
 import SeatLayoutpage from "./pages/SeatLayoutpage";
 import Testpage from "./pages/Testpage";
-import Login from "./pages/Login"
+import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SeatPage from "./pages/SeatPage";
 import Bookings from "./pages/Bookings";
 import BookingSummary from "./pages/BookingSummary";
 import RefreshHandler from "./components/RefreshHandler";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Sidebar from "./pages/Admin/components/Sidebar";
+import MoviesList from "./pages/Admin/Movies/MoviesList";
+import AddMovie from "./pages/Admin/Movies/AddMovie";
+import ScreenList from "./pages/Admin/screens/ScreensList";
+import AddScreen from "./pages/Admin/screens/AddScreen";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const handleLogout = () => setUser(null);
 
   const theme = createTheme({
     palette: {
       mode: "dark",
       background: {
-        default: "#070910", // App background color
-        paper: "#151b2e", // Navbar and surface background color
+        default: "#070910",
+        paper: "#151b2e",
       },
       text: {
-        primary: "#ffffff", // Text color for better contrast
-        secondary: "#b0b0b0", // Secondary text color
+        primary: "#ffffff",
+        secondary: "#b0b0b0",
       },
       primary: {
         main: "#90caf9",
@@ -54,7 +60,7 @@ const App = () => {
       },
       custom: {
         glow: {
-          main: "#18202A", // Glow color
+          main: "#18202A",
         },
       },
     },
@@ -75,12 +81,20 @@ const App = () => {
     </GoogleOAuthProvider>
   );
 
-  // const PrivateRoute = ({ element }) => {
-  //   return isAuthenticated ? element : <Navigate to="/" />
-  // }
+  const AdminLayout = () => {
+    return (
+      <>
+        <Sidebar />
+        <Box component="main" sx={{ padding: 2 }}>
+          <Outlet />
+        </Box>
+      </>
+    );
+  };
 
   return (
     <ThemeProvider theme={theme}>
+      <Toaster position="bottom-right" reverseOrder={false} />
       <CssBaseline />
       <Router>
         <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
@@ -94,16 +108,46 @@ const App = () => {
         >
           <Container>
             <Routes>
-              <Route path="/login" element={<OAuthWrapper><Login /></OAuthWrapper>} />
-              <Route path="/register" element={<OAuthWrapper><Register /></OAuthWrapper>} />
+              <Route
+                path="/login"
+                element={
+                  <OAuthWrapper>
+                    <Login />
+                  </OAuthWrapper>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <OAuthWrapper>
+                    <Register />
+                  </OAuthWrapper>
+                }
+              />
               <Route element={<Layout />}>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/movie/:movieId" element={<Moviepage />} />
-                <Route path="/movie/:movieId/showtimes" element={<ShowtimesPage />} />
-                <Route path="/movie/:movieId/showtimes/:showtimeId/seatlayout" element={<SeatPage />} />
+                <Route
+                  path="/movie/:movieId/showtimes"
+                  element={<ShowtimesPage />}
+                />
+                <Route
+                  path="/movie/:movieId/showtimes/:showtimeId/seatlayout"
+                  element={<SeatPage />}
+                />
                 <Route path="/booking/summary" element={<BookingSummary />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/test" element={<Testpage />} />
+              </Route>
+              {/* Admin Panel Routes */}
+              <Route element={<AdminLayout />}>
+                <Route path="/admin/movies" element={<MoviesList />} />
+                <Route path="/admin/movies/add" element={<AddMovie />} />
+                <Route path="/admin/movies/edit/:id" element={<AddMovie />} />
+                {/* Screens Route */}
+                <Route path="/admin/screens" element={<ScreenList />} />
+                <Route path="/admin/screens/add" element={<AddScreen />} />
+                <Route path="/admin/screens/edit/:id" element={<AddScreen />} />
               </Route>
             </Routes>
           </Container>

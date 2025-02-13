@@ -16,7 +16,7 @@ const WideMovieCard = ({ movie }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile screens
   const isTabletOrDesktop = useMediaQuery(theme.breakpoints.up("md")); // Detect tablets and up
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg")); // Detect desktop screens
-
+  console.log(movie);
   return (
     <Card
       sx={{
@@ -65,15 +65,15 @@ const WideMovieCard = ({ movie }) => {
           {movie.title}
         </Typography>
 
-        {/* <Typography variant="body2" sx={{ color: '#fff', marginTop: '8px' }}> */}
-        { movie.genre.map((genre,idx) => (
+        <Typography variant="body2" sx={{ color: '#fff', marginTop: '8px' }}>
+        {movie.genre?.map((genre,idx) => (
           <Chip key={idx} label={genre} size="small" 
           sx={{ 
             margin: "8px",
             
           }}  />
         ))}
-        {/* </Typography> */}
+        </Typography>
       </Box>
     </Card>
   );
