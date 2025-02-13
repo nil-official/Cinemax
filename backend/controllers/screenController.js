@@ -27,7 +27,7 @@ exports.createScreen = async (req, res) => {
     try {
         const screen = new Screen(req.body);
         await screen.save();
-        res.status(201).json(screen);
+        res.status(201).json({ "message": "Screen created successfully" }, screen);
     } catch (error) {
         res.status(400).json({ "error": "Internal Server Error" });
     }
@@ -42,7 +42,7 @@ exports.updateScreen = async (req, res) => {
         }
         res.status(200).json(screen);
     } catch (error) {
-        res.status(500).json({ "error": "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 }
 
@@ -53,7 +53,7 @@ exports.deleteScreen = async (req, res) => {
         if (!screen) {
             return res.status(404).json({ error: 'Screen not found' });
         }
-        res.status(200).json(screen);
+        res.status(200).json({ "message": "Screen deleted successfully" }, screen);
     } catch (error) {
         res.status(500).json({ "error": "Internal Server Error" });
     }

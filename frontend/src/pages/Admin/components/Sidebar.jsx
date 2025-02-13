@@ -56,7 +56,7 @@ const Sidebar = () => {
     { text: "Dashboard", icon: <Dashboard />, path: "/admin/dashboard" },
     { text: "Movies Management", icon: <LocalMovies />, path: "/admin/movies" },
     { text: "Screens Management", icon: <Tv/>, path: "/admin/screens" }, // New menu item
-    { text: "SHowtimes Management", icon: <Schedule />, path: "/admin/showtimes" }, // New menu item
+    { text: "Showtimes Management", icon: <Schedule />, path: "/admin/showtimes" }, // New menu item
     { text: "Users", icon: <People />, path: "/admin/users" },
     { text: "Settings", icon: <Settings />, path: "/admin/settings" },
   ];
