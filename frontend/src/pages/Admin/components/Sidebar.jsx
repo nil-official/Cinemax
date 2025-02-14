@@ -21,13 +21,15 @@ import {
   MovieCreation,
   Dashboard,
   LocalMovies,
-  People,
-  Settings,
   Logout,
-  Schedule ,
-  Tv
+  Schedule,
+  Tv,
+  ConfirmationNumber ,
+
+  QrCode
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
+
 
 const drawerWidth = 280;
 
@@ -48,6 +50,7 @@ const Sidebar = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
 
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -55,10 +58,10 @@ const Sidebar = () => {
   const menuItems = [
     { text: "Dashboard", icon: <Dashboard />, path: "/admin" },
     { text: "Movies Management", icon: <LocalMovies />, path: "/admin/movies" },
-    { text: "Screens Management", icon: <Tv/>, path: "/admin/screens" }, // New menu item
-    { text: "Showtimes Management", icon: <Schedule />, path: "/admin/showtimes" }, // New menu item
-    { text: "Users", icon: <People />, path: "/" },
-    { text: "Settings", icon: <Settings />, path: "/admin/settings" },
+    { text: "Screens Management", icon: <Tv />, path: "/admin/screens" },
+    { text: "Showtimes Management", icon: <Schedule />, path: "/admin/showtimes" },
+    { text: "Bookings Management", icon: <ConfirmationNumber />, path: "/admin/bookings" },
+    { text: "Ticket Management", icon: <QrCode />, path: "/admin/tickets" },
   ];
 
   const drawer = (
@@ -70,9 +73,11 @@ const Sidebar = () => {
         padding: theme.spacing(2),
       }}>
         <MovieCreation sx={{ mr: 1, color: theme.palette.primary.main }} />
+        
         <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
           CINEMAX ADMIN
         </Typography>
+       
       </Toolbar>
       <Divider />
       <List>
@@ -198,7 +203,7 @@ const Sidebar = () => {
           mt: '30px',
         }}
       >
-        
+        {/* Main content goes here */}
       </Box>
     </Box>
   );

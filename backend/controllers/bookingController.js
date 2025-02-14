@@ -94,9 +94,84 @@ const getBookedSeats = async (req, res) => {
     }
 }
 
+// Update booking
+const updateBooking = async (req, res) => {
+    try {
+        const booking = await Booking.findByIdAndUpdate(req.params.bookingId, req.body, { new: true });
+        res.status(200).json({
+            status: 'success',
+            message: 'Booking updated successfully',
+            data: { booking },
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+}
+
+// Delete booking
+const deleteBooking = async (req, res) => {
+    try {
+        await Booking.findByIdAndDelete(req.params.bookingId);
+        res.status(200).json({
+            status: 'success',
+            message: 'Booking deleted successfully',
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+}
+// For checking booking
+const checkBooking = async (req, res) => {
+    try {
+        const bookingId = req.params.bookingId;
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Booking not found',
+            });
+        }
+        if (booking.status === 'checked') {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Booking already checked',
+            });
+        }
+        if (booking.status === 'expired') {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Booking expired',
+            });
+        }
+        if (booking.status === 'booked') {
+            booking.status = 'checked';
+            await booking.save();
+            res.status(200).json({
+                status: 'success',
+                message: 'Booking checked successfully',
+                data: { booking },
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error checking booking',
+        });
+    }
+}
+
 module.exports = {
     createBooking,
     getUserBookings,
     getAllBookings,
     getBookedSeats,
+    updateBooking,
+    deleteBooking,
+    checkBooking
 };

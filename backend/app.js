@@ -13,6 +13,7 @@ const showtimeRouter = require('./routes/showtimeRoutes');
 const screenRouter = require('./routes/screenRoutes');
 const paymentRouter = require('./routes/paymentRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const dashboardRouter = require('./routes/dashboardRoutes');
 
 const app = express();
 app.disable('x-powered-by');
@@ -57,5 +58,6 @@ app.use('/showtimes', showtimeRouter);
 app.use('/screens', screenRouter);
 app.use('/payments', paymentRouter);
 app.use('/bookings', bookingRouter);
+app.use('/dashboard', dashboardRouter);
 
 app.listen(port, () => console.log(`app is running in PORT: ${port}`));

@@ -32,6 +32,7 @@ const ScreenList = () => {
   const fetchScreens = async () => {
     try {
       const response = await axios.get('/screens');
+      console.log(response)
       setScreens(response.data);
     } catch (error) {
       toast.error('Error fetching screens: ' );
@@ -139,11 +140,11 @@ const ScreenList = () => {
                   }}
                 >
                   <CardContent sx={{ padding: '16px' }}>
-                    <Typography variant="h5" sx={{ textTransform: 'uppercase', mb: 1, fontSize: '1rem', fontWeight: 'bold'}}>
+                    <Typography variant="h5" sx={{ textTransform: 'uppercase', mb: 1, fontSize: '2rem', fontWeight: 'bolder'}}>
                       {screen.name.length > 20 ? `${screen.name.slice(0, 20)}...` : screen.name} {/* Truncate long names */}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
-                      Layout: {screen.layout.map(item => item.category).join(', ')} 
+                    <Typography variant="body2" color="text.main" sx={{ fontSize: '1.2rem' }}>
+                     {screen.layout.map(item => `${item.category} - ₹ ${item.price}`).join(', ')}
                     </Typography>
                   </CardContent>
                   <CardActions sx={{ justifyContent: 'space-between', padding: '16px' }}>

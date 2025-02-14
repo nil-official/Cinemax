@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBookings } from "../store/actions/bookings";
 import { format } from 'date-fns';
-import { useLocation } from "react-router-dom";
 import {
   Box,
   Card,
@@ -20,9 +19,10 @@ import {
   DialogContent,
   IconButton,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import QRCode from "react-qr-code";
 import PaginationComponent from "../components/Pagination/PaginationComponent";
+import html2canvas from "html2canvas";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const Bookings = () => {
 
@@ -39,13 +39,8 @@ const Bookings = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    console.log("Fetching bookings...");
     dispatch(fetchBookings());
-    console.log("Bookings fetched!");
   }, [dispatch]);
-
-  console.log("Bookings now: ", bookings);
-
 
   const handleOpenDialog = (booking) => {
     setSelectedBooking(booking);
@@ -65,6 +60,17 @@ const Bookings = () => {
     const indexOfLastBooking = currentPage * bookingsPerPage;
     const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
     return bookings.slice(indexOfFirstBooking, indexOfLastBooking);
+  };
+
+  const handleDownloadQR = () => {
+    const qrElement = document.getElementById("qrCodeCanvas");
+    if (!qrElement) return;
+    html2canvas(qrElement).then((canvas) => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "ticket_qr_code.png";
+      link.click();
+    });
   };
 
   return (
@@ -158,14 +164,9 @@ const Bookings = () => {
 
       {/* Dialog Box for QR Ticket */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          Your Ticket
-          <IconButton onClick={handleCloseDialog}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogContent sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 1, p: 3 }}>
+        <DialogContent
+          sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 1, p: 3 }}
+        >
           {selectedBooking && (
             <>
               <Typography variant="h6" fontWeight="bold">
@@ -182,10 +183,16 @@ const Bookings = () => {
                   .join(", ")}
               </Typography>
 
-              {/* QR Code */}
-              <QRCode value={selectedBooking._id} size={180} />
+              {/* QR Code with a div ID for capturing */}
+              <div id="qrCodeCanvas" style={{ background: "white", padding: "10px", borderRadius: "10px" }}>
+                <QRCode value={selectedBooking._id} size={180} />
+              </div>
 
-              <Typography variant="body2" sx={{ color: "gray", mt: 2 }}>
+              <IconButton onClick={handleDownloadQR} sx={{ mt: 2 }}>
+                <DownloadIcon />
+              </IconButton>
+
+              <Typography variant="body2" sx={{ color: "gray", mt: 1 }}>
                 Scan this QR code at the entrance.
               </Typography>
             </>
