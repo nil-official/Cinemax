@@ -12,8 +12,6 @@ import {
   MenuItem,
   Paper,
   IconButton,
-  Alert,
-  Snackbar,
   styled,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -130,6 +128,7 @@ const AddMovie = () => {
   };
 
   const handleSubmit = async (e) => {
+    if (!validateDates()) return;
     e.preventDefault();
     try {
       const formattedData = {

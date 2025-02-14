@@ -27,12 +27,14 @@ import BookingSummary from "./pages/BookingSummary";
 import RefreshHandler from "./components/RefreshHandler";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Sidebar from "./pages/Admin/components/Sidebar";
+import Dashboard from "./pages/Admin/components/Dashboard";
 import MoviesList from "./pages/Admin/Movies/MoviesList";
 import AddMovie from "./pages/Admin/Movies/AddMovie";
 import ScreenList from "./pages/Admin/screens/ScreensList";
 import AddScreen from "./pages/Admin/screens/AddScreen";
+import ShowtimesList from "./pages/Admin/showtimes/ShowtimesList";
 import { Toaster } from "react-hot-toast";
-
+import AddShowtimes from "./pages/Admin/showtimes/AddShowtimes";
 const App = () => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -85,7 +87,8 @@ const App = () => {
     return (
       <>
         <Sidebar />
-        <Box component="main" sx={{ padding: 2 }}>
+        <Box component="main" sx={{ padding: 2,height:'100vh'
+         }}>
           <Outlet />
         </Box>
       </>
@@ -141,6 +144,8 @@ const App = () => {
               </Route>
               {/* Admin Panel Routes */}
               <Route element={<AdminLayout />}>
+                <Route path="/admin" element={<Dashboard/>}/>
+                {/* Movies Route */}
                 <Route path="/admin/movies" element={<MoviesList />} />
                 <Route path="/admin/movies/add" element={<AddMovie />} />
                 <Route path="/admin/movies/edit/:id" element={<AddMovie />} />
@@ -148,6 +153,10 @@ const App = () => {
                 <Route path="/admin/screens" element={<ScreenList />} />
                 <Route path="/admin/screens/add" element={<AddScreen />} />
                 <Route path="/admin/screens/edit/:id" element={<AddScreen />} />
+                {/* Showtimes Route */}
+                <Route path="/admin/showtimes" element={<ShowtimesList/>}/>
+                <Route path="/admin/showtimes/add" element={<AddShowtimes />} />
+                <Route path="/admin/showtimes/edit/:id" element={<AddShowtimes />} />
               </Route>
             </Routes>
           </Container>

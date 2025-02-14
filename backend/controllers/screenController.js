@@ -1,7 +1,7 @@
 const Screen = require('../models/screenSchema');
 
 // Get screen by id
-exports.getScreenById = async (req, res) => {
+const getScreenById = async (req, res) => {
     try {
         const screen = await Screen.findById(req.params.screenId);
         if (!screen) {
@@ -15,7 +15,7 @@ exports.getScreenById = async (req, res) => {
 }
 
 // Get all screens
-exports.getAllScreens = async (req, res) => {
+const getAllScreens = async (req, res) => {
     try {
         const screens = await Screen.find();
         res.status(200).json(screens);
@@ -26,7 +26,7 @@ exports.getAllScreens = async (req, res) => {
 }
 
 // Create a new screen
-exports.createScreen = async (req, res) => {
+const createScreen = async (req, res) => {
     try {
         const screen = new Screen(req.body);
         await screen.save();
@@ -38,7 +38,7 @@ exports.createScreen = async (req, res) => {
 };
 
 // Update a screen
-exports.updateScreen = async (req, res) => {
+const updateScreen = async (req, res) => {
     try {
         const screen = await Screen.findByIdAndUpdate(req.params.screenId, req.body, { new: true });
         if (!screen) {
@@ -52,7 +52,7 @@ exports.updateScreen = async (req, res) => {
 }
 
 // Delete a screen
-exports.deleteScreen = async (req, res) => {
+const deleteScreen = async (req, res) => {
     try {
         const screen = await Screen.findByIdAndDelete(req.params.screenId);
         if (!screen) {
@@ -64,3 +64,11 @@ exports.deleteScreen = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+module.exports = {
+    getScreenById,
+    getAllScreens,
+    createScreen,
+    updateScreen,
+    deleteScreen,
+};

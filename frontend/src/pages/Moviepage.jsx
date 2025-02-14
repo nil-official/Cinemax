@@ -7,6 +7,7 @@ import { makeStyles } from '@mui/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMovie, fetchMovies } from '../store/actions/movies';
 import { resetShowtimes } from '../store/actions/showtimes';
+import {format} from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -16,14 +17,18 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   mainContent: {
-    position: 'relative',
-    padding: theme.spacing(4),
-    color: '#fff',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    borderRadius: theme.shape.borderRadius,
-    overflow: 'hidden',
-    boxShadow: theme.shadows[5],
+    // position: 'relative',
+    // padding: theme.spacing(4),
+    // color: '#fff',
+    // backgroundSize: 'cover',
+    // backgroundPosition: 'center',
+    // borderRadius: theme.shape.borderRadius,
+    // overflow: 'hidden',
+    // boxShadow: theme.shadows[5],
+    display:'flex',
+    justifyContent:'center',
+    flexDirection:'column',
+    
   },
   moviePoster: {
     zIndex: 2,
@@ -36,14 +41,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0.5),
   },
   button: {
-    margin: theme.spacing(1),
+    marginBottom: theme.spacing(2),
     '&:hover': {
       backgroundColor: theme.palette.primary.dark,
     },
   },
   infoSection: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     border: '1px solid #ccc',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -52,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   movieDetails: {
     padding: theme.spacing(2),
-    borderRadius: theme.shape.borderRadius,
+    // borderRadius: theme.shape.borderRadius,
   },
   infoItem: {
     marginBottom: theme.spacing(1),
@@ -63,14 +67,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.main,
   },
 }));
-
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-const capitalizeWords = (string) => {
-  return string.split(' ').map(capitalizeFirstLetter).join(' ');
-};
 
 const MoviePage = () => {
   const classes = useStyles();
@@ -111,7 +107,7 @@ const MoviePage = () => {
 
   const movie = selectedMovie; 
   return (
-    <div>
+    <div style={{height:'100vh'}}>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} onClick={handleBack}>
@@ -133,20 +129,20 @@ const MoviePage = () => {
           </Grid>
           <Grid item xs={12} lg={8} className={classes.movieDetails}>
             <Typography variant="h3" gutterBottom>
-              {capitalizeWords(movie.title)}
+              {movie.title}
             </Typography>
-            <Box display="flex" flexWrap="wrap" mb={2}>
+            <Box display="flex" flexWrap="wrap" mb={2} textTransform='capitalize'>
               {movie.genre.map((g, index) => (
-                <Chip key={index} label={capitalizeFirstLetter(g)} className={classes.chip} />
+                <Chip key={index} label={g} className={classes.chip} />
               ))}
             </Box>
             <Box display="flex" alignItems="center" mb={2}>
               <Chip label={`${Math.floor(movie.duration / 60)}h ${movie.duration % 60}m`} className={classes.chip}/>
             </Box>
             <Typography paragraph>
-              {capitalizeFirstLetter(movie.description)}
+              {movie.description}
             </Typography>
-            <Box display="flex" alignItems="center" gap={2} mb={2} p={0}>
+            <Box display="flex" alignItems="center" gap={2} mb={3}>
               <Button color="secondary" className={classes.button} startIcon={<AccessTimeIcon />} variant="contained" onClick={handleGetShowtimesClick}>
                 Get Show Time
               </Button>
@@ -156,19 +152,23 @@ const MoviePage = () => {
                 <Typography variant="subtitle1" className={classes.infoTitle} gutterBottom>
                   Director
                 </Typography>
-                <Typography>{capitalizeFirstLetter(movie.director)}</Typography>
+                <Typography>{movie.director}</Typography>
               </Grid>
               <Grid item xs={12} md={4} className={classes.infoItem}>
                 <Typography variant="subtitle1" className={classes.infoTitle} gutterBottom>
                   Cast
                 </Typography>
-                <Typography>{movie.cast.map(capitalizeFirstLetter).join(' • ')}</Typography>
+                <Typography>{movie.cast.join(' • ')}</Typography>
               </Grid>
               <Grid item xs={12} md={4} className={classes.infoItem}>
                 <Typography variant="subtitle1" className={classes.infoTitle} gutterBottom>
                   Release Date
                 </Typography>
-                <Typography>{movie.releaseDate}</Typography>
+                <Typography> {format(new Date(movie.releaseDate), "do MMMM yyyy")}</Typography>
+                <Typography variant="subtitle1" className={classes.infoTitle} gutterBottom>
+                  End date 
+                </Typography>
+                <Typography> {format(new Date(movie.endDate), "do MMMM yyyy")}</Typography>
               </Grid>
             </Grid>
           </Grid>

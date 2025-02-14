@@ -1,21 +1,24 @@
 const router = require('express').Router();
 const showtimeController = require('../controllers/showtimeController');
 
-router.get('/:movieId', showtimeController.getShowtimesByMovieId);
-router.get('/id/:showtimeId', showtimeController.getShowtimeById);
+// router.get('/:movieId', showtimeController.getShowtimesByMovieId);
+// router.get('/id/:showtimeId', showtimeController.getShowtimeById);
 // Get showtimes by movie id
-router.get('/showtimes/:movieId', showtimeController.getShowtimesByMovieId);
+router.get('/:movieId', showtimeController.getShowtimesByMovieId);
 
 // Get showtime by id
-router.get('/showtimes/:showtimeId', showtimeController.getShowtimeById);
+router.get('/:showtimeId', showtimeController.getShowtimeById);
+
+//Get all Showtimes
+router.get('/', showtimeController.getAllShowtimes);
 
 // Create a new showtime
-router.post('/showtimes', showtimeController.createShowtime);
+router.post('/', showtimeController.createShowtime);
 
 // Update a showtime
-router.put('/showtimes/:showtimeId', showtimeController.updateShowtime);
+router.put('/:showtimeId', showtimeController.updateShowtime);
 
 // Delete a showtime
-router.delete('/showtimes/:showtimeId', showtimeController.deleteShowtime);
+router.delete('/:showtimeId', showtimeController.deleteShowtime);
 
 module.exports = router;

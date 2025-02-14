@@ -1,22 +1,22 @@
 const router = require('express').Router();
 const screenController = require('../controllers/screenController');
 
-router.get('/:screenId', screenController.getScreenById);
-router.post('/', screenController.createScreen);
+// router.get('/:screenId', screenController.getScreenById);
+// router.post('/', screenController.createScreen);
 
 // get screen by id
-router.get('/screens/:screenId', screenController.getScreenById);
+router.get('/:screenId', screenController.getScreenById);
 
 // get all screens
-router.get('/screens', screenController.getAllScreens);
+router.get('/', screenController.getAllScreens);
 
 // create a new screen
-router.post('/screens', screenController.createScreen);
+router.post('/', screenController.createScreen);
 
 // update a screen
-router.put('/screens/:screenId', screenController.updateScreen);
+router.put('/:screenId', screenController.updateScreen);
 
 // Delete a screen
-router.delete('/screens/:screenId', screenController.deleteScreen);
+router.delete('/:screenId', screenController.deleteScreen);
 
 module.exports = router;
