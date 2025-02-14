@@ -4,6 +4,7 @@ import axios from "../../../axiosConfig";
 import { Box, Typography, Button, Grid, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
 
+
 const AddScreen = () => {
   const [rows, setRows] = useState(5);
   const [cols, setCols] = useState(5);
@@ -185,6 +186,7 @@ const AddScreen = () => {
         alignItems: "center",
       }}
     >
+     
       <Typography variant="h4" sx={{ fontWeight: 600, mb: 2 }}>
         {id ? "Edit Screen" : "Admin Seat Layout Editor"}
       </Typography>

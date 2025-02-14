@@ -9,6 +9,9 @@ router.get('/:movieId', showtimeController.getShowtimesByMovieId);
 // Get showtime by id
 router.get('/:showtimeId', showtimeController.getShowtimeById);
 
+// aternate
+router.get('/id/:showtimeId', showtimeController.getShowtimeById);
+
 //Get all Showtimes
 router.get('/', showtimeController.getAllShowtimes);
 

@@ -33,8 +33,11 @@ import AddMovie from "./pages/Admin/Movies/AddMovie";
 import ScreenList from "./pages/Admin/screens/ScreensList";
 import AddScreen from "./pages/Admin/screens/AddScreen";
 import ShowtimesList from "./pages/Admin/showtimes/ShowtimesList";
-import { Toaster } from "react-hot-toast";
 import AddShowtimes from "./pages/Admin/showtimes/AddShowtimes";
+import BookingList from "./pages/Admin/bookings/BookingList";
+import TicketScanner from "./pages/Admin/bookings/TicketScanner";
+import { Toaster } from "react-hot-toast";
+
 const App = () => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -157,6 +160,10 @@ const App = () => {
                 <Route path="/admin/showtimes" element={<ShowtimesList/>}/>
                 <Route path="/admin/showtimes/add" element={<AddShowtimes />} />
                 <Route path="/admin/showtimes/edit/:id" element={<AddShowtimes />} />
+                {/* Bookings Route */}
+                <Route path="/admin/bookings" element={<BookingList/>}/>
+                <Route path="/admin/tickets" element={<TicketScanner/>}/>
+            
               </Route>
             </Routes>
           </Container>

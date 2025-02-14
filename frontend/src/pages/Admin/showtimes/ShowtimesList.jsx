@@ -17,6 +17,7 @@ import {
 import { Edit, Delete, Add } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import axios from "../../../axiosConfig";
+import PaginationComponent from "../../../components/PaginationComponent";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
 
@@ -32,6 +33,7 @@ const ShowtimesList = () => {
   const fetchShowtimes = async () => {
     try {
       const response = await axios.get("/showtimes");
+      // console.log(response)
       setShowtimes(response.data);
     } catch (error) {
       toast.error("Error fetching showtimes");

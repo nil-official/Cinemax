@@ -15,6 +15,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../../axiosConfig';
 import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
+import { IconButton } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 
 const AddShowtimes = () => {
   const [formData, setFormData] = useState({
@@ -55,7 +57,7 @@ const AddShowtimes = () => {
   const fetchShowtime = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/showtimes/${id}`);
+      const response = await axios.get(`/showtimes/id/${id}`);
       const showtime = response.data;
   
       if (showtime) {
@@ -151,8 +153,8 @@ const AddShowtimes = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" sx={{ mb: 4 }}>
+    <Box sx={{ p: 3}}>
+      <Typography variant="h4" sx={{ mb: 4,  display: "flex", justifyContent: "center", alignItems: "center" }}>
         {id ? 'Edit Showtime' : 'Add New Showtime'}
       </Typography>
 
