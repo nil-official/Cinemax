@@ -11,7 +11,8 @@ import {
   Divider,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { FiSettings, FiUser, FiLogOut, FiLogIn } from "react-icons/fi";
+import { IoTicketOutline } from "react-icons/io5";
+import { FiUser, FiLogOut, FiLogIn } from "react-icons/fi";
 import { BsSun, BsMoon } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -65,6 +66,11 @@ const NavbarDropdown = () => {
     handleClose();
     navigate("/login");
   };
+
+  const handleBookings = () => {
+    handleClose();
+    navigate("/bookings");
+  }
 
   const getFullName = () => {
     if (user?.firstName && user?.lastName) {
@@ -129,12 +135,12 @@ const NavbarDropdown = () => {
               Profile Settings
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
-              <FiSettings style={{ marginRight: "10px" }} />
-              Account Management
+            <MenuItem onClick={handleBookings}>
+              <IoTicketOutline style={{ marginRight: "10px" }} />
+              My Bookings
             </MenuItem>
 
-            <MenuItem>
+            {/* <MenuItem>
               {isDarkMode ? (
                 <BsMoon style={{ marginRight: "10px" }} />
               ) : (
@@ -145,7 +151,7 @@ const NavbarDropdown = () => {
                 onChange={(e) => setIsDarkMode(e.target.checked)}
                 size="small"
               />
-            </MenuItem>
+            </MenuItem> */}
 
             <MenuItem onClick={handleLogout} sx={{ color: "error.main" }}>
               <FiLogOut style={{ marginRight: "10px" }} />

@@ -1,49 +1,80 @@
-import React from 'react';
-import { ScrollMenu } from 'react-horizontal-scrolling-menu';
-import 'react-horizontal-scrolling-menu/dist/styles.css';
-import { Box, Typography, useMediaQuery, Grid } from '@mui/material';
-// import movies from '../../../data/movies.json';
-import { useTheme } from '@mui/material/styles';
-import MovieCarouselCard from './MovieCarouselCard';
+import React from "react";
+import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import "react-horizontal-scrolling-menu/dist/styles.css";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
+import MovieCarouselCard from "./MovieCarouselCard";
 
-const MovieCarousel = ({movies}) => {
+const MovieCarousel = ({ movies }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect mobile screens
-  const isTabletOrDesktop = useMediaQuery(theme.breakpoints.up('md')); // Detect tablet and above
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Sort movies by releaseDate (assuming releaseDate is in 'YYYY-MM-DD' format or similar)
-  const sortedMovies = [...movies].sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+  // Sort movies by releaseDate
+  const sortedMovies = [...movies].sort(
+    (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
+  );
 
-  // Get the first 3, 4, or 5 sorted movies based on screen size
-  const moviesToShow = isMobile ? movies : sortedMovies.slice(0, 5); // On desktop/tablet, show top 5, otherwise all movies
+  const moviesToShow = isMobile ? movies : sortedMovies.slice(0, 10);
 
   return (
-    <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
-
-      {/* For desktop/tablet, use Grid to align items evenly */}
-      {isTabletOrDesktop ? (
-        <Grid container spacing={2} justifyContent="space-evenly">
-          {moviesToShow.map((movie, i) => (
-            <Grid item key={i} xs={2} sm={2} md={2} lg={2} xl={2}>
-              <MovieCarouselCard movie={movie} theme={theme}/>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <ScrollMenu
-          style={{
-            display: 'flex',
-            justifyContent: 'space-evenly', // Evenly space the cards horizontally
-          }}
-        >
-          {moviesToShow.map((movie, i) => (
-            <Box key={i} sx={{ textAlign: 'center' }}>
-              <MovieCarouselCard movie={movie} theme={theme}/>
-            </Box>
-          ))}
-        </ScrollMenu>
-      )}
+    <Box sx={{ position: "relative", maxWidth: "100%", overflow: "hidden" }}>
+      {/* Scroll Menu with Navigation Buttons */}
+      <ScrollMenu
+        LeftArrow={isMobile ? null : LeftArrow}
+        RightArrow={isMobile ? null : RightArrow}
+        style={{ display: "flex", justifyContent: "space-evenly" }}
+      >
+        {moviesToShow.map((movie, i) => (
+          <Box key={i} sx={{ textAlign: "center" }}>
+            <MovieCarouselCard movie={movie} theme={theme} />
+          </Box>
+        ))}
+      </ScrollMenu>
     </Box>
+  );
+};
+
+// Left Scroll Button Component
+const LeftArrow = () => {
+  const { scrollPrev } = React.useContext(VisibilityContext);
+  return (
+    <IconButton
+      onClick={() => scrollPrev()}
+      sx={{
+        position: "absolute",
+        left: 0,
+        top: "50%",
+        transform: "translateY(-50%)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        color: "white",
+        zIndex:999,
+        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.8)" },
+      }}
+    >
+      <ArrowBackIos sx={{paddingLeft:"5px", fontSize: "28px"}}/>
+    </IconButton>
+  );
+};
+
+// Right Scroll Button Component
+const RightArrow = () => {
+  const { scrollNext } = React.useContext(VisibilityContext);
+  return (
+    <IconButton
+      onClick={() => scrollNext()}
+      sx={{
+        position: "absolute",
+        right: 0,
+        top: "50%",
+        transform: "translateY(-50%)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        color: "white",
+        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.8)" },
+      }}
+    >
+      <ArrowForwardIos />
+    </IconButton>
   );
 };
 

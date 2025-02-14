@@ -50,7 +50,7 @@ const ShowtimesCard = ({ category, showtimes, movieId, showtime }) => {
                                 M-Ticket
                             </Typography>
                             <Typography variant="body1">
-                                ₹{showtimes[0].screenId.price} onwards
+                                ₹{showtimes[0].screenId.layout[0].price} onwards
                             </Typography>
                         </Box>
                     </Box>

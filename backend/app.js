@@ -16,7 +16,7 @@ const bookingRouter = require('./routes/bookingRoutes');
 
 const app = express();
 app.disable('x-powered-by');
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {

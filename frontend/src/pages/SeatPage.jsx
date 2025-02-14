@@ -172,7 +172,7 @@ const SeatPage = () => {
                         flexWrap: 'nowrap',
                     }}>
                         <Typography variant="h6" sx={{ mb: 2 }}>
-                            {section.category}
+                            {section.category} - ₹{section.price}
                         </Typography>
                         {section.rows.map((rows, rowIndex) => (
                             <Grid2 key={rowIndex} container alignItems="center" sx={{ mb: 1, flexWrap: 'nowrap' }}>
