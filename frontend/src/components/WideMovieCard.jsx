@@ -16,7 +16,6 @@ const WideMovieCard = ({ movie }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile screens
   const isTabletOrDesktop = useMediaQuery(theme.breakpoints.up("md")); // Detect tablets and up
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg")); // Detect desktop screens
-  console.log(movie);
   return (
     <Card
       sx={{
@@ -24,6 +23,7 @@ const WideMovieCard = ({ movie }) => {
         overflow: "hidden",
         borderRadius: "8px",
         marginBottom: "16px",
+        cursor: "pointer",
       }}
     >
       {/* Hero card background image */}
@@ -33,7 +33,7 @@ const WideMovieCard = ({ movie }) => {
         alt={movie.title}
         sx={{
           objectFit: "cover",
-          height: { xs: 320, sm: 360, md: 400 },
+          height: { xs: 320, sm: 360, md: 500 },
         }}
       />
 
@@ -50,7 +50,7 @@ const WideMovieCard = ({ movie }) => {
           right: 0,
           height: "100%",
           background:
-            "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 50%);",
+            "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 60%);",
           padding: "28px",
         }}
       >
@@ -65,15 +65,18 @@ const WideMovieCard = ({ movie }) => {
           {movie.title}
         </Typography>
 
-        <Typography variant="body2" sx={{ color: '#fff', marginTop: '8px' }}>
-        {movie.genre?.map((genre,idx) => (
-          <Chip key={idx} label={genre} size="small" 
-          sx={{ 
-            margin: "8px",
-            
-          }}  />
-        ))}
-        </Typography>
+        <Box variant="body2" sx={{ color: '#fff', marginTop: '8px' }}>
+          {movie.genre?.map((genre, idx) => (
+            <Chip key={idx} label={genre} size="small"
+              sx={{
+                margin: "8px",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.primary.contrastText,
+                },
+              }} />
+          ))}
+        </Box>
       </Box>
     </Card>
   );

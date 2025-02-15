@@ -104,42 +104,83 @@ const updateMovie = async (req, res) => {
 
 // Get movies now showing
 const getNowShowing = async (req, res) => {
-    try {
-        const activeShowtimes = await Showtime.find()
-            .populate({
-                path: 'movieId'
-            });
-        const activeMovies = [...new Set(activeShowtimes.map(showtime => showtime.movieId))];
-        res.status(200).json({
-            status: 'success',
-            data: activeMovies,
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            status: 'error',
-            message: error.message,
-        });
-    }
+  try {
+    const activeShowtimes = await Showtime.find()
+      .populate({
+        path: 'movieId'
+      });
+    const activeMovies = [...new Set(activeShowtimes.map(showtime => showtime.movieId))];
+    res.status(200).json({
+      status: 'success',
+      data: activeMovies,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: error.message,
+    });
+  }
 };
 
 // Get movies upcoming
 const getUpcoming = async (req, res) => {
   try {
-      const upcomingMovies = await Movie.find({
-          releaseDate: { $gt: new Date() }
-      });
-      res.status(200).json({
-          status: 'success',
-          message: 'Upcoming movies fetched successfully',
-          data: upcomingMovies,
-      });
+    const upcomingMovies = await Movie.find({
+      releaseDate: { $gt: new Date() }
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'Upcoming movies fetched successfully',
+      data: upcomingMovies,
+    });
   } catch (error) {
-      console.log(error);
-      res.status(500).json({
-          status: 'error',
-          message: error.message,
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: error.message,
+    });
+  }
+};
+
+// Get featured movies
+const getFeaturedMovie = async (req, res) => {
+  try {
+    const featuredMovies = await Movie.find({ isFeatured: true });
+    res.status(200).json({
+      status: 'success',
+      message: 'Featured movies fetched successfully',
+      data: featuredMovies,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: 'error',
+      message: error.message,
+    });
+  }
+};
+
+// Method for making a movie featured = true by taking movieId from params
+const makeMovieFeatured = async (req, res) => {
+  const _id = req.params.movieId;
+  try {
+    const movie = await Movie.findByIdAndUpdate(_id, { isFeatured: true });
+    return !movie
+      ? res.status(404).send({
+        status: "error",
+        message: "Movie not found!"
+      })
+      : res.send({
+        status: "success",
+        message: "Movie featured successfully!",
+        data: movie,
       });
+  } catch (e) {
+    res.status(500).send({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 
@@ -150,9 +191,9 @@ const deleteMovie = async (req, res) => {
     return !movie
       ? res.status(404).send({ error: "Movie not found!" })
       : res.send({
-          message: "Movie deleted successfully!",
-          movie,
-        });
+        message: "Movie deleted successfully!",
+        movie,
+      });
   } catch (e) {
     res.status(500).send({
       error: "Movie deletion failed due to an internal error!",
@@ -160,12 +201,30 @@ const deleteMovie = async (req, res) => {
   }
 };
 
+// search movie
+const searchMovie = async (req, res) => {
+  const query = req.query.q;
+  try {
+    console.log(query);
+    const movies = await Movie.find({
+      title: { $regex: query, $options: "i" },
+    });
+    res.status(200).json(movies);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
-    getAllMovies,
-    getMovieById,
-    createMovie,
-    updateMovie,
-    getNowShowing,
-    getUpcoming,
-    deleteMovie,
+  getAllMovies,
+  getMovieById,
+  createMovie,
+  updateMovie,
+  getNowShowing,
+  getUpcoming,
+  deleteMovie,
+  getFeaturedMovie,
+  makeMovieFeatured,
+  searchMovie,
 };

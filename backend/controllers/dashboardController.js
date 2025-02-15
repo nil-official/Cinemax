@@ -21,7 +21,9 @@ const getRevenueByDays = async (req, res) => {
         ]);
         res.status(200).json({
             status: 'success',
-            data: revenue.map(item => ({ date: item._id, revenue: item.total })),
+            data: revenue
+                .map(item => ({ date: item._id, revenue: item.total }))
+                .sort((a, b) => new Date(b.date) - new Date(a.date)),
         });
     } catch (error) {
         res.status(500).json({

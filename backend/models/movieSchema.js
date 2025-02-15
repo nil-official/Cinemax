@@ -48,6 +48,9 @@ const movieSchema = new Schema({
     type: Number,
     required: true,
   },
+  isFeautured: {
+    type: Boolean,
+  },
   releaseDate: {
     type: Date,
     required: true,

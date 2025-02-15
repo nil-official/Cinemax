@@ -37,6 +37,8 @@ import AddShowtimes from "./pages/Admin/showtimes/AddShowtimes";
 import BookingList from "./pages/Admin/bookings/BookingList";
 import TicketScanner from "./pages/Admin/bookings/TicketScanner";
 import { Toaster } from "react-hot-toast";
+import Footer from "./components/Footer/Footer";
+import SearchResults from "./pages/SearchResults";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -76,6 +78,7 @@ const App = () => {
       <>
         <Navbar user={user} onLogout={handleLogout} />
         <Outlet />
+        <Footer />
       </>
     );
   };
@@ -90,8 +93,9 @@ const App = () => {
     return (
       <>
         <Sidebar />
-        <Box component="main" sx={{ padding: 2,height:'100vh'
-         }}>
+        <Box component="main" sx={{
+          padding: 2, height: '100vh'
+        }}>
           <Outlet />
         </Box>
       </>
@@ -132,6 +136,7 @@ const App = () => {
               />
               <Route element={<Layout />}>
                 <Route path="/" element={<Homepage />} />
+                <Route path="/search/:query" element={<SearchResults />} />
                 <Route path="/movie/:movieId" element={<Moviepage />} />
                 <Route
                   path="/movie/:movieId/showtimes"
@@ -147,7 +152,7 @@ const App = () => {
               </Route>
               {/* Admin Panel Routes */}
               <Route element={<AdminLayout />}>
-                <Route path="/admin" element={<Dashboard/>}/>
+                <Route path="/admin" element={<Dashboard />} />
                 {/* Movies Route */}
                 <Route path="/admin/movies" element={<MoviesList />} />
                 <Route path="/admin/movies/add" element={<AddMovie />} />
@@ -157,13 +162,13 @@ const App = () => {
                 <Route path="/admin/screens/add" element={<AddScreen />} />
                 <Route path="/admin/screens/edit/:id" element={<AddScreen />} />
                 {/* Showtimes Route */}
-                <Route path="/admin/showtimes" element={<ShowtimesList/>}/>
+                <Route path="/admin/showtimes" element={<ShowtimesList />} />
                 <Route path="/admin/showtimes/add" element={<AddShowtimes />} />
                 <Route path="/admin/showtimes/edit/:id" element={<AddShowtimes />} />
                 {/* Bookings Route */}
-                <Route path="/admin/bookings" element={<BookingList/>}/>
-                <Route path="/admin/tickets" element={<TicketScanner/>}/>
-            
+                <Route path="/admin/bookings" element={<BookingList />} />
+                <Route path="/admin/tickets" element={<TicketScanner />} />
+
               </Route>
             </Routes>
           </Container>

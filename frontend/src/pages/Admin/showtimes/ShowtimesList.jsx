@@ -25,10 +25,16 @@ const ShowtimesList = () => {
   const [showtimes, setShowtimes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchShowtimes();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const fetchShowtimes = async () => {
     try {
@@ -60,6 +66,14 @@ const ShowtimesList = () => {
       screenName.includes(searchTerm.toLowerCase())
     );
   });
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentShowtimes = filteredShowtimes.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   if (loading) {
     return (
@@ -177,7 +191,7 @@ const ShowtimesList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredShowtimes.map((showtime) => (
+            {currentShowtimes.map((showtime) => (
               <TableRow key={showtime._id} hover>
                 <TableCell sx={{ fontSize: "1rem" }}>
                   {showtime.movieId.title}
@@ -225,6 +239,14 @@ const ShowtimesList = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {filteredShowtimes.length > 0 && (
+        <PaginationComponent
+          totalItems={filteredShowtimes.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
     </Box>
   );
 };
