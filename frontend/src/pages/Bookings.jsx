@@ -74,7 +74,7 @@ const Bookings = () => {
   };
 
   return (
-    <Box sx={{ p: 3, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <Box sx={{ p: 3, mb: 10, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
       <Typography variant="h4" sx={{ fontWeight: 600, mb: 3, width: "100%" }}>
         Bookings
       </Typography>

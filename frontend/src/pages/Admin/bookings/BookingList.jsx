@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import axios from "../../../axiosConfig";
+import PaginationComponent from "../../../components/PaginationComponent";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
 
@@ -28,10 +29,13 @@ const BookingList = () => {
   const [loading, setLoading] = useState(true);
   const [movieFilter, setMovieFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchBookings();
   }, []);
+
 
   const fetchBookings = async () => {
     try {
@@ -73,6 +77,15 @@ const BookingList = () => {
       statusFilter === "all" || booking.status === statusFilter;
     return matchesMovie && matchesStatus;
   });
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
 
   if (loading) {
     return (
@@ -190,7 +203,7 @@ const BookingList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredBookings.map((booking) => (
+            {currentBookings.map((booking) => (
               <TableRow key={booking._id}>
                 {/* <TableCell>{booking._id.slice(-6)}</TableCell> */}
 
@@ -233,7 +246,7 @@ const BookingList = () => {
                 </TableCell>
               </TableRow>
             ))}
-            {filteredBookings.length === 0 && (
+            {currentBookings.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6} align="center">
                   <Typography variant="body1" sx={{ py: 2 }}>
@@ -245,6 +258,12 @@ const BookingList = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <PaginationComponent
+        totalItems={filteredBookings.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </Box>
   );
 };

@@ -7,7 +7,7 @@ import { makeStyles } from '@mui/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMovie, fetchMovies } from '../store/actions/movies';
 import { resetShowtimes } from '../store/actions/showtimes';
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -25,10 +25,10 @@ const useStyles = makeStyles((theme) => ({
     // borderRadius: theme.shape.borderRadius,
     // overflow: 'hidden',
     // boxShadow: theme.shadows[5],
-    display:'flex',
-    justifyContent:'center',
-    flexDirection:'column',
-    
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+
   },
   moviePoster: {
     zIndex: 2,
@@ -82,32 +82,33 @@ const MoviePage = () => {
   }, [status, dispatch]);
 
 
-    useEffect(() => {
-        if (!selectedMovie && status === 'succeeded' && movieId) {
-            const movie = movies.find((movie) => movie._id === movieId);
-            if (movie) {
-                dispatch(selectMovie(movie));
-            }
-        }
-    }, [status, movieId, dispatch, movies]);
-
-    const handleGetShowtimesClick =() => {
-        dispatch(resetShowtimes());
-        navigate(`/movie/${movieId}/showtimes`)
+  useEffect(() => {
+    if (!selectedMovie && status === 'succeeded' && movieId) {
+      const movie = movies.find((movie) => movie._id === movieId);
+      if (movie) {
+        dispatch(selectMovie(movie));
+      }
     }
-    
-    const handleBack = () => {
-      navigate(-1);
-    };
+  }, [status, movieId, dispatch, movies]);
+
+  const handleGetShowtimesClick = () => {
+    dispatch(resetShowtimes());
+    navigate(`/movie/${movieId}/showtimes`)
+  }
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   // If the movie is not selected, return a loading state or a message
   if (!selectedMovie) {
     return <Typography>Loading...</Typography>;
   }
 
-  const movie = selectedMovie; 
+  const movie = selectedMovie;
   return (
-    <div style={{height:'100vh'}}>
+    // <div sx>
+    <Box sx={{ mb: 10 }}>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} onClick={handleBack}>
@@ -137,7 +138,7 @@ const MoviePage = () => {
               ))}
             </Box>
             <Box display="flex" alignItems="center" mb={2}>
-              <Chip label={`${Math.floor(movie.duration / 60)}h ${movie.duration % 60}m`} className={classes.chip}/>
+              <Chip label={`${Math.floor(movie.duration / 60)}h ${movie.duration % 60}m`} className={classes.chip} />
             </Box>
             <Typography paragraph>
               {movie.description}
@@ -166,7 +167,7 @@ const MoviePage = () => {
                 </Typography>
                 <Typography> {format(new Date(movie.releaseDate), "do MMMM yyyy")}</Typography>
                 <Typography variant="subtitle1" className={classes.infoTitle} gutterBottom>
-                  End date 
+                  End date
                 </Typography>
                 <Typography> {format(new Date(movie.endDate), "do MMMM yyyy")}</Typography>
               </Grid>
@@ -174,7 +175,8 @@ const MoviePage = () => {
           </Grid>
         </Grid>
       </Container>
-    </div>
+    </Box>
+    // </div>
   );
 };
 

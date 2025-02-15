@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Grid2, Select, MenuItem, Skeleton, useMediaQuery, useTheme, Slide } from "@mui/material";
-import { seatData } from "../../data/screen1";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchScreen, selectSeats } from "../store/actions/screens";
@@ -123,7 +122,7 @@ const SeatPage = () => {
     }
 
     return (
-        <Box sx={{ p: 2, pb: 10, minHeight: "100vh", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ p: 2, mb: 10, minHeight: "100vh", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box sx={{ width: '100%', mb: 2 }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant={isMobile ? "h5" : "h4"} sx={{ fontWeight: 600 }} gutterBottom>

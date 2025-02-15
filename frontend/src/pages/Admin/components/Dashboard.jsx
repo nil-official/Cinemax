@@ -26,7 +26,7 @@ const Dashboard = () => {
         setError(null);
 
         const startDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split("T")[0];
-        const endDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0];         
+        const endDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0];
 
         const response = await axios.post("/dashboard/revenue", {
           startDate,
@@ -92,41 +92,41 @@ const Dashboard = () => {
       </Typography>
 
       {/* Top Stats Cards */}
-        {revenueData.x.length > 0 && revenueData.y.length > 0 ? (
-          <Grid container spacing={3}>
-            {[
-          { title: "Today's Revenue", value: `₹ ${revenueData.y[0]}` },
-          { title: "Revenue for Last 30 Days", value: `₹ ${totalRevenueLast30Days}` },
-          { title: "Today's Bookings", value: totalBookings !== null ? totalBookings : "-" },
-            ].map((stat, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card
-              sx={{
-            borderRadius: "12px",
-            boxShadow: 3,
-            transition: "0.3s",
-            "&:hover": { boxShadow: 6 },
-              }}
-            >
-              <CardContent>
-            <Typography variant="h4" fontWeight="bold" textAlign="center">
-              {stat.value}
-            </Typography>
-              </CardContent>
-              <CardHeader
-            title={stat.title}
-            sx={{ textAlign: "center", paddingTop: "0" }}
-            titleTypographyProps={{ sx: { fontSize: "16px" } }}
-              />
-            </Card>
-          </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <Typography textAlign="center">No data available</Typography>
-        )}
+      {revenueData.x.length > 0 && revenueData.y.length > 0 ? (
+        <Grid container spacing={3}>
+          {[
+            { title: "Today's Revenue", value: `₹ ${revenueData.y[0]}` },
+            { title: "Revenue for Last 30 Days", value: `₹ ${totalRevenueLast30Days}` },
+            { title: "Today's Bookings", value: totalBookings !== null ? totalBookings : "-" },
+          ].map((stat, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                sx={{
+                  borderRadius: "12px",
+                  boxShadow: 3,
+                  transition: "0.3s",
+                  "&:hover": { boxShadow: 6 },
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h4" fontWeight="bold" textAlign="center">
+                    {stat.value}
+                  </Typography>
+                </CardContent>
+                <CardHeader
+                  title={stat.title}
+                  sx={{ textAlign: "center", paddingTop: "0" }}
+                  titleTypographyProps={{ sx: { fontSize: "16px" } }}
+                />
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography textAlign="center">No data available</Typography>
+      )}
 
-        {/* Revenue Chart */}
+      {/* Revenue Chart */}
       <Card sx={{ borderRadius: "12px", boxShadow: 3, marginTop: "24px" }}>
         <CardHeader
           title="Revenue Overview"

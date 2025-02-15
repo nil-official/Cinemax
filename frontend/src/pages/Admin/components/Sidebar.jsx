@@ -24,11 +24,13 @@ import {
   Logout,
   Schedule,
   Tv,
-  ConfirmationNumber ,
+  ConfirmationNumber,
 
   QrCode
 } from "@mui/icons-material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../store/actions/auth";
 
 
 const drawerWidth = 280;
@@ -50,6 +52,9 @@ const Sidebar = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -64,20 +69,25 @@ const Sidebar = () => {
     { text: "Ticket Management", icon: <QrCode />, path: "/admin/tickets" },
   ];
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
   const drawer = (
     <>
-      <Toolbar sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
+      <Toolbar sx={{
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(2),
       }}>
         <MovieCreation sx={{ mr: 1, color: theme.palette.primary.main }} />
-        
+
         <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
           CINEMAX ADMIN
         </Typography>
-       
+
       </Toolbar>
       <Divider />
       <List>
@@ -101,13 +111,13 @@ const Sidebar = () => {
                 },
               }}
             >
-              <ListItemIcon sx={{ 
+              <ListItemIcon sx={{
                 minWidth: 40,
-                color: location.pathname === item.path ? theme.palette.primary.main : theme.palette.text.secondary 
+                color: location.pathname === item.path ? theme.palette.primary.main : theme.palette.text.secondary
               }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText 
+              <ListItemText
                 primary={item.text}
                 sx={{
                   '& .MuiTypography-root': {
@@ -133,7 +143,7 @@ const Sidebar = () => {
             <ListItemIcon sx={{ minWidth: 40, color: theme.palette.error.main }}>
               <Logout />
             </ListItemIcon>
-            <ListItemText primary="Logout" />
+            <ListItemText primary="Logout" onClick={handleLogout} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -181,7 +191,7 @@ const Sidebar = () => {
         >
           {drawer}
         </Drawer>
-        
+
         {/* Desktop drawer */}
         <StyledDrawer
           variant="permanent"

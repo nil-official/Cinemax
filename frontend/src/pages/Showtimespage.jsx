@@ -76,7 +76,7 @@ const ShowtimesPage = () => {
         }, {});
 
     return (
-        <Container maxWidth="lg" sx={{ minHeight: '100vh', mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 34 }}>
             {status === 'loading' ? (
                 <Box>
                     <Box>

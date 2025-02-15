@@ -101,7 +101,7 @@ const BookingSummary = () => {
     };
 
     return (
-        <Box sx={{ p: 3, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Box sx={{ p: 3, mb: 10, display: "flex", flexDirection: "column", alignItems: "center" }}>
             <Box sx={{ width: '100%', mb: 2 }}>
                 <Typography variant={isMobile ? "h5" : "h4"} sx={{ fontWeight: 600, mb: 3 }}>
                     Booking Summary
