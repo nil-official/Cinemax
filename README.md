@@ -126,9 +126,10 @@ The backend will run on `http://localhost:5000`.
    VITE_RAZORPAY_API_KEY=<your_razorpay_key_id>
    ```
 
-4. **Start the development server:**
+4. **Start the frontend server:**
+
    ```bash
-   npm start
+   npm run dev
    ```
 
 The application will be available at `http://localhost:5173`.
