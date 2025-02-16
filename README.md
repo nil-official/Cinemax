@@ -91,7 +91,7 @@ The backend will run on `http://localhost:5000`.
 
 3. **Start the development server:**
     ```bash
-    npm run dev
+    npm start
     ```
 
 The application will be available at `http://localhost:5173`.
