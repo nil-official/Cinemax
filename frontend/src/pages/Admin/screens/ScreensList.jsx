@@ -17,6 +17,7 @@ import { Add, Edit, Delete } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import DeleteButton from '../../../components/DeleteButton/DeleteButton';
 
 const ScreenList = () => {
   const [screens, setScreens] = useState([]);
@@ -158,14 +159,15 @@ const ScreenList = () => {
                     >
                       Edit
                     </Button>
-                    <IconButton 
+                    {/* <IconButton 
                       color="error" 
                       onClick={() => deleteScreen(screen._id)}
                       aria-label="delete screen"
                       size="small"
                     >
                       <Delete />
-                    </IconButton>
+                    </IconButton> */}
+                    <DeleteButton onDelete={() => deleteScreen(screen._id)} itemName={screen.name}/>
                   </CardActions>
                 </Card>
               </Grid2>

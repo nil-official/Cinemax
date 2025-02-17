@@ -20,6 +20,7 @@ import axios from "../../../axiosConfig";
 import PaginationComponent from "../../../components/PaginationComponent";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
+import DeleteButton from '../../../components/DeleteButton/DeleteButton';
 
 const ShowtimesList = () => {
   const [showtimes, setShowtimes] = useState([]);
@@ -216,14 +217,15 @@ const ShowtimesList = () => {
                   >
                     <Edit />
                   </IconButton>
-                  <IconButton
+                  {/* <IconButton
                     color="error"
                     onClick={() => {
                       handleDelete(showtime._id);
                     }}
                   >
                     <Delete />
-                  </IconButton>
+                  </IconButton> */}
+                  <DeleteButton onDelete={() => handleDelete(showtime._id)} />
                 </TableCell>
               </TableRow>
             ))}
