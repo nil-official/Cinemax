@@ -23,6 +23,7 @@ import axios from "../../../axiosConfig";
 import PaginationComponent from "../../../components/PaginationComponent";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
+import DeleteButton from "../../../components/DeleteButton/DeleteButton";
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -237,12 +238,13 @@ const BookingList = () => {
                   </FormControl>
                 </TableCell>
                 <TableCell>
-                  <IconButton>
+                  {/* <IconButton>
                     <Delete
                       onClick={() => handleDelete(booking._id)}
                       color="error"
                     />
-                  </IconButton>
+                  </IconButton> */}
+                  <DeleteButton onDelete={() => handleDelete(booking._id)} />
                 </TableCell>
               </TableRow>
             ))}

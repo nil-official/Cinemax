@@ -18,6 +18,7 @@ import { toast } from 'react-hot-toast';
 import PaginationComponent from '../../../components/PaginationComponent';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import DeleteButton from '../../../components/DeleteButton/DeleteButton';
 
 const MoviesList = () => {
   const [movies, setMovies] = useState([]);
@@ -173,14 +174,15 @@ const MoviesList = () => {
                     >
                       Edit
                     </Button>
-                    <IconButton 
+                    {/* <IconButton 
                       color="error" 
                       onClick={() => deleteMovie(movie._id)}
                       aria-label="delete movie"
                       size="small"
                     >
                       <Delete />
-                    </IconButton>
+                    </IconButton> */}
+                    <DeleteButton onDelete={() => deleteMovie(movie._id)}/>
                   </CardActions>
                 </Card>
               </Grid2>
