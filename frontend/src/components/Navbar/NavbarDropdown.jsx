@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/actions/auth";
 import { use } from "react";
+import { getUserRole } from "../../utils/auth";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -47,6 +48,9 @@ const NavbarDropdown = () => {
     }
   }, []);
 
+  // check if user is admin or not
+  const isAdmin = getUserRole() === "admin";
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -139,6 +143,18 @@ const NavbarDropdown = () => {
               <IoTicketOutline style={{ marginRight: "10px" }} />
               My Bookings
             </MenuItem>
+
+            {
+              isAdmin && (
+                <>
+                  <Divider />
+                  <MenuItem onClick={() => navigate("/admin")}>
+                    <FiUser style={{ marginRight: "10px" }} />
+                    Admin Dashboard
+                  </MenuItem>
+                </>
+              )
+            }
 
             {/* <MenuItem>
               {isDarkMode ? (

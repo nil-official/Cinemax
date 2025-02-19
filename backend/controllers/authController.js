@@ -24,8 +24,8 @@ const googleAuth = async (req, res) => {
                 avatar: picture,
             });
         }
-        const { _id } = user;
-        const token = jwt.sign({ _id, email },
+        const { _id, role } = user;
+        const token = jwt.sign({ _id, email, role },
             process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRE,
         });
@@ -75,8 +75,8 @@ const register = async (req, res) => {
             email,
             password,
         });
-        const { _id } = user;
-        const token = jwt.sign({ _id, email },
+        const { _id, role } = user;
+        const token = jwt.sign({ _id, email, role },
             process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRE,
         });
@@ -122,8 +122,8 @@ const login = async (req, res) => {
                 message: "Invalid password",
             });
         }
-        const { _id } = user;
-        const token = jwt.sign({ _id, email },
+        const { _id, role } = user;
+        const token = jwt.sign({ _id, email, role },
             process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRE,
         });
