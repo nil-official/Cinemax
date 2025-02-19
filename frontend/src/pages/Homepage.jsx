@@ -56,6 +56,8 @@ const Homepage = () => {
     try {
       const response = await axios.get('/movies/featured/get');
       setFeaturedMovie(response.data.data[0]);
+      console.log(response.data.data[0]);
+      
     }
     catch (error) {
       console.log(error);
