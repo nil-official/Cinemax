@@ -1,19 +1,12 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const { Schema } = mongoose;
 const showtimeSchema = new Schema({
-  startAt: {
-    type: Date,
-    required: true,
-    trim: true,
-  },
-  endAt: {
-    type: Date,
-    required: true,
-    trim: true,
-  },
   date: {
     type: Date,
+    required: true,
+  },
+  timeSlot: {
+    type: String,
     required: true,
   },
   movieId: {
@@ -26,8 +19,10 @@ const showtimeSchema = new Schema({
     ref: 'Screen',
     required: true,
   },
-});
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+}, { timestamps: true, });
 
-const Showtime = mongoose.model('Showtime', showtimeSchema);
-
-module.exports = Showtime;
+module.exports = model('Showtime', showtimeSchema);
