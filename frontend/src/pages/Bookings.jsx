@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBookings } from "../store/actions/bookings";
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import {
   Box,
   Card,
@@ -83,7 +83,6 @@ const Bookings = () => {
         <CircularProgress />
       ) : (
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
-          {/* {bookings && bookings?.map((booking) => ( */}
           {getCurrentBookings().map((booking) => (
             <Grid2 container key={booking._id} sx={{ width: "100%" }}>
               <Card sx={{
@@ -118,7 +117,7 @@ const Bookings = () => {
                     Date: {format(new Date(booking.showtime.date), "dd MMM yyyy")}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Time: {format(new Date(booking.showtime.startAt), "hh:mm a")} - {format(new Date(booking.showtime.endAt), "hh:mm a")}
+                    Time: {format(parse(booking.showtime.timeSlot, "HH:mm", new Date()), "hh:mm a")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Booked Seats: {booking.bookedSeats
@@ -176,7 +175,7 @@ const Bookings = () => {
                 Date: {format(new Date(selectedBooking.showtime.date), "dd MMM yyyy")}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Time: {format(new Date(selectedBooking.showtime.startAt), "hh:mm a")} - {format(new Date(selectedBooking.showtime.endAt), "hh:mm a")}
+                Time: {format(parse(selectedBooking.showtime.timeSlot, "HH:mm", new Date()), "hh:mm a")}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 Seats: {selectedBooking.bookedSeats?.flatMap(rowData => rowData.seats.map(seat => `${rowData.row}${seat}`))

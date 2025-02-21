@@ -45,25 +45,22 @@ export const fetchShowtimes = (movieId) => {
     return async (dispatch) => {
         dispatch(fetchShowtimesPending());
         try {
-            const response = await axios.get(`/showtimes/${movieId}`); 
-            dispatch(fetchShowtimesFulfilled(response.data));
+            const response = await axios.get(`/showtimes/movie/${movieId}`);
+            dispatch(fetchShowtimesFulfilled(response.data.showtimes));
         } catch (error) {
-            // uncomment to see the error response structure of axios
-            // console.log(error);
             dispatch(fetchShowtimesRejected(error.message));
         }
     };
 };
 
+// Async action to fetch showtime by id
 export const fetchShowtimeById = (showtimeId) => {
     return async (dispatch) => {
         dispatch(fetchShowtimesPending());
         try {
-            const response = await axios.get(`/showtimes/id/${showtimeId}`);
-            dispatch(selectShowtime(response.data));
+            const response = await axios.get(`/showtimes/${showtimeId}`);
+            dispatch(selectShowtime(response.data.showtime));
         } catch (error) {
-            // uncomment to see the error response structure of axios
-            // console.log(error);
             dispatch(fetchShowtimesRejected(error.message));
         }
     };

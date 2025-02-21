@@ -1,34 +1,30 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Button, Card, CardContent, Typography, useMediaQuery } from "@mui/material";
 import { FaMobileAlt } from "react-icons/fa";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { selectShowtime } from "../../store/actions/showtimes";
 
-const ShowtimesCard = ({ category, showtimes, movieId, showtime }) => {
+const ShowtimesCard = ({ category, showtimes, movieId }) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isMobile = useMediaQuery('(max-width:600px)');
 
-    // const handleShowtimeClick = () => {
-    //     console.log("Showtime Clicked");
-    //     navigate(`/movie/${movieId}/showtimes/${showtime._id}/seatlayout`);
-    // };
-    // useEffect(() => {
-    //     if (showtime) {
-    //         navigate(`/movie/${movieId}/showtimes/${showtime._id}/seatlayout`);
-    //     }
-    // }, [showtime, navigate, movieId]);
-
     const handleShowtimeSelect = (show) => {
         dispatch(selectShowtime(show))
             .then(() => {
-                // console.log("Showtime selected: ", show);
-                navigate(`/movie/${movieId}/showtimes/${show._id}/seatlayout`)
+                navigate(`/movie/${movieId}/showtimes/${show._id}/seatlayout`);
             });
-    }
+    };
+
+    // Convert and format timeSlot, and sort showtimes
+    const sortedShowtimes = [...showtimes].sort((a, b) => {
+        const timeA = parse(a.timeSlot, "HH:mm", new Date());
+        const timeB = parse(b.timeSlot, "HH:mm", new Date());
+        return timeA - timeB;
+    });
 
     return (
         <Card sx={{ mb: 3, borderRadius: 2, boxShadow: 3 }}>
@@ -57,17 +53,19 @@ const ShowtimesCard = ({ category, showtimes, movieId, showtime }) => {
 
                     {/* Right Section: Showtimes */}
                     <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-                        {showtimes.map((show) => (
-                            <Button
-                                key={show._id}
-                                variant="outlined"
-                                fontSize="large"
-                                sx={{ fontWeight: 'bold', fontSize: '16px' }}
-                                onClick={() => handleShowtimeSelect(show)}
-                            >
-                                {format(new Date(show.startAt), 'hh:mm a')}
-                            </Button>
-                        ))}
+                        {sortedShowtimes.map((show) => {
+                            const formattedTime = format(parse(show.timeSlot, "HH:mm", new Date()), "hh:mm a");
+                            return (
+                                <Button
+                                    key={show._id}
+                                    variant="outlined"
+                                    sx={{ fontWeight: 'bold', fontSize: '16px' }}
+                                    onClick={() => handleShowtimeSelect(show)}
+                                >
+                                    {formattedTime}
+                                </Button>
+                            );
+                        })}
                     </Box>
                 </Box>
             </CardContent>

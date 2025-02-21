@@ -19,19 +19,20 @@ import { IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
 const AddShowtimes = () => {
-  const [formData, setFormData] = useState({
-    movieId: '',
-    screenId: '',
-    date: new Date().toLocaleDateString('en-ca'),
-    startAt: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-    endAt: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-  });
-  
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [movies, setMovies] = useState([]);
   const [screens, setScreens] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const [selectedScreenTimes, setSelectedScreenTimes] = useState([]);
+
+  const [formData, setFormData] = useState({
+    movieId: '',
+    screenId: '',
+    timeSlot: '',
+    date: ''
+  });
 
   useEffect(() => {
     fetchMoviesAndScreens();
@@ -47,9 +48,8 @@ const AddShowtimes = () => {
         axios.get('/screens')
       ]);
       setMovies(moviesRes.data);
-      setScreens(screensRes.data);
+      setScreens(screensRes.data.screens);
     } catch (error) {
-      console.log(error);
       toast.error('Error fetching data');
     }
   };
@@ -57,32 +57,38 @@ const AddShowtimes = () => {
   const fetchShowtime = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/showtimes/id/${id}`);
-      const showtime = response.data;
-  
+
+      // Fetch showtime
+      const showtimesRes = await axios.get(`/showtimes/${id}`);
+      const showtime = showtimesRes.data.showtime;
+
+      // Fetch screens
+      const screensRes = await axios.get('/screens');
+      const screens = screensRes.data.screens;
+
       if (showtime) {
+        // Checking if the date is valid
         const date = new Date(showtime.date);
-        const startAt = new Date(showtime.startAt);
-        const endAt = new Date(showtime.endAt);
-  
-        // Check if the dates are valid
-        if (isNaN(date) || isNaN(startAt) || isNaN(endAt)) {
+        if (isNaN(date)) {
           throw new Error('Invalid date values');
         }
-  
+
+        // Find the selected screen and set its time slots
+        const selectedScreen = screens.find(screen => screen._id === showtime.screenId._id);
+        setSelectedScreenTimes(selectedScreen.timeSlots);
+
+        // Set formData after selectedScreenTimeSlots is populated
         setFormData({
           movieId: showtime.movieId ? showtime.movieId._id : '',
           screenId: showtime.screenId ? showtime.screenId._id : '',
-          date: format(date, 'yyyy-MM-dd'),
-          startAt: format(startAt, 'HH:mm'),
-          endAt: format(endAt, 'HH:mm')
+          timeSlot: showtime.timeSlot ? showtime.timeSlot : '',
+          date: format(date, 'yyyy-MM-dd')
         });
       } else {
         toast.error('Showtime not found');
         navigate('/admin/showtimes');
       }
     } catch (error) {
-      console.log(error);
       toast.error('Error fetching showtime');
     } finally {
       setLoading(false);
@@ -91,6 +97,13 @@ const AddShowtimes = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Find the selected screen and set its time slots
+    if (name === 'screenId') {
+      const selectedScreen = screens.find(screen => screen._id === value);
+      setSelectedScreenTimes(selectedScreen ? selectedScreen.timeSlots : []);
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -98,25 +111,15 @@ const AddShowtimes = () => {
   };
 
   const validateForm = () => {
-    if (!formData.movieId || !formData.screenId || !formData.date || 
-        !formData.startAt || !formData.endAt) {
+    if (!formData.movieId || !formData.screenId || !formData.timeSlot || !formData.date) {
       toast.error('All fields are required');
       return false;
     }
-
-    const startTime = new Date(`${formData.date}T${formData.startAt}`);
-    const endTime = new Date(`${formData.date}T${formData.endAt}`);
-    if (endTime <= startTime) {
-      toast.error('End time must be after start time');
-      return false;
-    }
-
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     try {
@@ -124,9 +127,8 @@ const AddShowtimes = () => {
       const data = {
         movieId: formData.movieId,
         screenId: formData.screenId,
-        date: formData.date,
-        startAt: `${formData.date}T${formData.startAt}`,
-        endAt: `${formData.date}T${formData.endAt}`
+        timeSlot: formData.timeSlot,
+        date: formData.date
       };
 
       if (id) {
@@ -138,7 +140,11 @@ const AddShowtimes = () => {
       }
       navigate('/admin/showtimes');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Error saving showtime');
+      if (error.response?.status === 409) {
+        toast.error('The selected time slot is already occupied for this date.');
+      } else {
+        toast.error(error.response?.data?.message || 'Error saving showtime.');
+      }
     } finally {
       setLoading(false);
     }
@@ -153,16 +159,17 @@ const AddShowtimes = () => {
   }
 
   return (
-    <Box sx={{ p: 3}}>
-      <Typography variant="h4" sx={{ mb: 4,  display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" sx={{ mb: 4, display: "flex", justifyContent: "center", alignItems: "center" }}>
         {id ? 'Edit Showtime' : 'Add New Showtime'}
       </Typography>
 
       <Paper sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
         <form onSubmit={handleSubmit}>
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Movie</InputLabel>
+            <InputLabel>Movie *</InputLabel>
             <Select
+              label="Movie"
               name="movieId"
               value={formData.movieId}
               onChange={handleChange}
@@ -177,11 +184,13 @@ const AddShowtimes = () => {
           </FormControl>
 
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Screen</InputLabel>
+            <InputLabel>Screen *</InputLabel>
             <Select
+              label="Screen"
               name="screenId"
               value={formData.screenId}
               onChange={handleChange}
+              disabled={!formData.movieId}
               required
             >
               {screens.map((screen) => (
@@ -192,52 +201,53 @@ const AddShowtimes = () => {
             </Select>
           </FormControl>
 
-          <TextField
-            fullWidth
-            label="Date"
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            sx={{ mb: 2 }}
-            InputLabelProps={{ shrink: true }}
-            required
-          />
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Time Slot *</InputLabel>
+            <Select
+              label="Time Slot"
+              name="timeSlot"
+              value={formData.timeSlot}
+              onChange={handleChange}
+              disabled={!formData.screenId}
+              required
+            >
+              {selectedScreenTimes.map((timeSlot, index) => (
+                <MenuItem key={index} value={timeSlot}>
+                  {timeSlot}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <TextField
-              fullWidth
-              label="Start Time"
-              type="time"
-              name="startAt"
-              value={formData.startAt}
+              label="Date"
+              type="date"
+              name="date"
+              value={formData.date}
               onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                min: new Date().toISOString().split('T')[0]
+              }}
+              disabled={!formData.timeSlot}
               required
             />
-            <TextField
-              fullWidth
-              label="End Time"
-              type="time"
-              name="endAt"
-              value={formData.endAt}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-              required
-            />
-          </Box>
+          </FormControl>
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               onClick={() => navigate('/admin/showtimes')}
               disabled={loading}
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={loading}
             >
               {loading ? 'Saving...' : id ? 'Update Showtime' : 'Add Showtime'}

@@ -22,7 +22,7 @@ import { Delete } from "@mui/icons-material";
 import axios from "../../../axiosConfig";
 import PaginationComponent from "../../../components/PaginationComponent";
 import { toast } from "react-hot-toast";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import DeleteButton from "../../../components/DeleteButton/DeleteButton";
 
 const BookingList = () => {
@@ -41,7 +41,6 @@ const BookingList = () => {
   const fetchBookings = async () => {
     try {
       const response = await axios.get("/bookings/all");
-      console.log(response.data.data);
       setBookings(response.data.data);
     } catch (error) {
       toast.error("Error fetching bookings");
@@ -86,7 +85,6 @@ const BookingList = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
 
   if (loading) {
     return (
@@ -206,14 +204,11 @@ const BookingList = () => {
           <TableBody>
             {currentBookings.map((booking) => (
               <TableRow key={booking._id}>
-                {/* <TableCell>{booking._id.slice(-6)}</TableCell> */}
-
-                <TableCell>{booking.movie.title}</TableCell>
                 <TableCell>
-                  {format(
-                    new Date(booking.showtime.startAt),
-                    "dd/MM/yyyy hh:mm a"
-                  )}
+                  {booking.movie.title}
+                </TableCell>
+                <TableCell>
+                  {format(parse(booking.showtime.timeSlot, "HH:mm", new Date()), "hh:mm a")}
                 </TableCell>
                 <TableCell>
                   {booking.bookedSeats
@@ -222,7 +217,9 @@ const BookingList = () => {
                     )
                     .join(", ")}
                 </TableCell>
-                <TableCell>₹{booking.totalPrice}</TableCell>
+                <TableCell>
+                  ₹{booking.totalPrice}
+                </TableCell>
                 <TableCell>
                   <FormControl size="small">
                     <Select
@@ -238,12 +235,6 @@ const BookingList = () => {
                   </FormControl>
                 </TableCell>
                 <TableCell>
-                  {/* <IconButton>
-                    <Delete
-                      onClick={() => handleDelete(booking._id)}
-                      color="error"
-                    />
-                  </IconButton> */}
                   <DeleteButton onDelete={() => handleDelete(booking._id)} />
                 </TableCell>
               </TableRow>

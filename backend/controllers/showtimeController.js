@@ -144,7 +144,7 @@ const createShowtime = async (req, res) => {
     // Check if the timeSlot is already booked
     const existingShowtime = await Showtime.findOne({ date, timeSlot, screenId, isDeleted: { $ne: true } });
     if (existingShowtime) {
-      return res.status(400).json({
+      return res.status(409).json({
         status: 'error',
         message: `Time slot ${timeSlot} is already associated for date ${date} for screen with id: ${screenId}`,
       });

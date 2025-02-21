@@ -4,17 +4,18 @@ import axios from "../../../axiosConfig";
 import { Box, Typography, Button, Grid, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
 
-
 const AddScreen = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [rows, setRows] = useState(5);
   const [cols, setCols] = useState(5);
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState(0);
   const [layouts, setLayouts] = useState([]);
   const [screenName, setScreenName] = useState("");
+  const [timeSlots, setTimeSlots] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { id } = useParams();
 
   useEffect(() => {
     if (id) {
@@ -26,7 +27,7 @@ const AddScreen = () => {
     try {
       setLoading(true);
       const response = await axios.get(`/screens/${id}`);
-      const { name, layout } = response.data;
+      const { name, layout } = response.data.screen;
       setScreenName(name);
       setLayouts(layout);
     } catch (error) {
@@ -102,7 +103,7 @@ const AddScreen = () => {
         const lastSeatNumber = row.seats[row.seats.length - 1];
         return {
           ...row,
-          seats: [...row.seats, null, lastSeatNumber + 1], // Add a null value for the gap and the next seat number
+          seats: [...row.seats, null, lastSeatNumber + 1],
         };
       }
     );
@@ -131,12 +132,17 @@ const AddScreen = () => {
       toast.error("Screen name is required");
       return;
     }
-  
+
     if (layouts.length === 0) {
       toast.error("At least one layout is required");
       return;
     }
-  
+
+    if (timeSlots.length === 0) {
+      toast.error("At least one time slot is required");
+      return;
+    }
+
     const screenData = {
       name: screenName,
       layout: layouts.map((layout) => ({
@@ -144,38 +150,38 @@ const AddScreen = () => {
         price: Number(layout.price),
         rows: layout.rows.map((row) => ({
           row: row.row,
-          seats: row.seats, // Keep null values in the seats array
+          seats: row.seats,
         })),
       })),
+      timeSlots: timeSlots,
     };
-  
+
+    console.log("Screen data to be saved: ", screenData);
+
+
     try {
-      console.log(screenData);
       setLoading(true);
-  
-      // Optional: Add validation here
-      if (!screenName || !layouts.length) {
-        throw new Error("Screen name and layouts are required.");
+
+      if (!screenName || !layouts.length || !timeSlots.length) {
+        throw new Error("Screen name, layouts, and time slots are required.");
       }
-  
+
       if (id) {
         await axios.put(`/screens/${id}`, screenData);
         toast.success("Screen updated successfully");
       } else {
         await axios.post("/screens", screenData);
-        console.log("Screen Data:", screenData);
         toast.success("Screen created successfully");
       }
-  
+
       navigate("/admin/screens");
     } catch (error) {
-      console.error("Error saving screen:", error); // Log the error for debugging
       toast.error(error.response?.data?.message || "Error saving screen");
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <Box
       sx={{
@@ -186,7 +192,7 @@ const AddScreen = () => {
         alignItems: "center",
       }}
     >
-     
+
       <Typography variant="h4" sx={{ fontWeight: 600, mb: 2 }}>
         {id ? "Edit Screen" : "Admin Seat Layout Editor"}
       </Typography>
@@ -196,7 +202,7 @@ const AddScreen = () => {
           label="Screen Name"
           value={screenName}
           onChange={(e) => setScreenName(e.target.value)}
-          sx={{ mb: 3, width:"15%"}}
+          sx={{ mb: 3, width: "15%" }}
           required
         />
         <TextField
@@ -218,7 +224,7 @@ const AddScreen = () => {
         <TextField
           label="Category"
           value={category}
-          sx={{width:"15%"}}
+          sx={{ width: "15%" }}
           onChange={(e) => setCategory(e.target.value)}
           required
         />
@@ -226,18 +232,25 @@ const AddScreen = () => {
           label="Price"
           type="text"
           value={price}
-          sx={{width:80}}
+          sx={{ width: 80 }}
           onChange={(e) => setPrice(Number(e.target.value))}
           required
         />
-        <Button variant="contained" onClick={handleSetLayout}
-          sx={{
-            height:55
-          }}
-        >
-          Add Layout
-        </Button>
+        <TextField
+          label="Time Slots (e.g., 10:00, 14:00, 17:30)"
+          value={timeSlots.join(", ")}
+          onChange={(e) => setTimeSlots(e.target.value.split(",").map(slot => slot.trim()))}
+          sx={{ width: "35%" }}
+          required
+        />
       </Box>
+      <Button variant="contained" onClick={handleSetLayout}
+        sx={{
+          marginBottom: 4,
+        }}
+      >
+        Add Layout
+      </Button>
       {layouts.map((layout, layoutIndex) => (
         <Box
           key={layoutIndex}
@@ -264,7 +277,7 @@ const AddScreen = () => {
                     borderColor:
                       seat === null || seat === "Gap" ? "transparent" : "none",
                     color:
-                      seat === null || seat === "Gap" ? "transparent" : "none", // Optional: if you want to change the text color as well
+                      seat === null || seat === "Gap" ? "transparent" : "none",
                   }}
                 >
                   {seat !== null ? seat : "Gap"}
@@ -311,16 +324,16 @@ const AddScreen = () => {
           </Box>
         </Box>
       ))}
-     <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
-        <Button 
-          variant="outlined" 
+      <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+        <Button
+          variant="outlined"
           onClick={() => navigate("/admin/screens")}
           disabled={loading}
         >
           Cancel
         </Button>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           color="success"
           onClick={handleSave}
           disabled={loading}

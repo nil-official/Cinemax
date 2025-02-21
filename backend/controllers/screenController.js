@@ -176,23 +176,42 @@ const isValidName = async (name) => {
 const isValidLayout = (layout) => {
 
     // Check if layout is an array and has at least one element
-    if (!Array.isArray(layout) || layout.length === 0) return false;
+    if (!Array.isArray(layout) || layout.length === 0) {
+        console.log('Invalid layout structure: layout is not an array or is empty');
+        return false
+    };
 
     // Check if layout has the required properties
     for (const category of layout) {
         // Check if category has required properties
-        if (!category.category || typeof category.category !== 'string') return false;
-        if (!category.price || typeof category.price !== 'number' || category.price <= 0) return false;
-        if (!Array.isArray(category.rows) || category.rows.length === 0) return false;
+        if (!category.category || typeof category.category !== 'string') {
+            console.log('Invalid layout structure: category is missing or not a string');
+            return false
+        };
+        if (!category.price || typeof category.price !== 'number' || category.price <= 0) {
+            console.log('Invalid layout structure: price is missing, not a number, or less than 0');
+            return false
+        };
+        if (!Array.isArray(category.rows) || category.rows.length === 0) {
+            console.log('Invalid layout structure: rows is not an array or is empty');
+            return false
+        };
 
         for (const row of category.rows) {
             // Check if row has required properties
-            if (!row.row || typeof row.row !== 'string') return false;
-            if (!Array.isArray(row.seats) || row.seats.length === 0) return false;
+            if (!row.row || typeof row.row !== 'string') {
+                console.log('Invalid layout structure: row is missing or not a string');
+                return false
+            };
+            if (!Array.isArray(row.seats) || row.seats.length === 0) {
+                console.log('Invalid layout structure: seats is not an array or is empty');
+                return false
+            };
 
             // Check seat structure (should contain numbers as strings or null)
             for (const seat of row.seats) {
-                if (seat !== null && (typeof seat !== 'string' || !/^\d+$/.test(seat))) {
+                if (seat !== null && !/^\d+$/.test(seat)) {
+                    console.log('Invalid layout structure: seat is not a number or null');
                     return false;
                 }
             }
