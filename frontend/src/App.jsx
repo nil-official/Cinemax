@@ -16,8 +16,6 @@ import {
 import Navbar from "./components/Navbar/Navbar";
 import Homepage from "./pages/Homepage";
 import Moviepage from "./pages/Moviepage";
-import ShowtimesPage from "./pages/Showtimespage";
-import SeatLayoutpage from "./pages/SeatLayoutpage";
 import Testpage from "./pages/Testpage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -40,6 +38,7 @@ import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer/Footer";
 import SearchResults from "./pages/SearchResults";
 import AdminRoute from "./routes/AdminRoute";
+import Showtimes from "./pages/Showtimes";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -94,9 +93,7 @@ const App = () => {
     return (
       <>
         <Sidebar />
-        <Box component="main" sx={{
-          padding: 2, height: '100vh'
-        }}>
+        <Box component="main" sx={{ padding: 2, height: '100vh' }}>
           <Outlet />
         </Box>
       </>
@@ -109,44 +106,20 @@ const App = () => {
       <CssBaseline />
       <Router>
         <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
-        <Container
-          width="100%"
-          height="100vh"
-          sx={{
-            backgroundImage:
-              "radial-gradient(circle, rgb(12, 22, 54) 0%, rgba(7,9,16,1) 65%)",
-          }}
-        >
+        <Container width="100%" height="100vh" sx={{
+          backgroundImage:
+            "radial-gradient(circle, rgb(12, 22, 54) 0%, rgba(7,9,16,1) 65%)"
+        }}>
           <Container>
             <Routes>
-              <Route
-                path="/login"
-                element={
-                  <OAuthWrapper>
-                    <Login />
-                  </OAuthWrapper>
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <OAuthWrapper>
-                    <Register />
-                  </OAuthWrapper>
-                }
-              />
+              <Route path="/login" element={<OAuthWrapper><Login /></OAuthWrapper>} />
+              <Route path="/register" element={<OAuthWrapper><Register /></OAuthWrapper>} />
               <Route element={<Layout />}>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/search/:query" element={<SearchResults />} />
                 <Route path="/movie/:movieId" element={<Moviepage />} />
-                <Route
-                  path="/movie/:movieId/showtimes"
-                  element={<ShowtimesPage />}
-                />
-                <Route
-                  path="/movie/:movieId/showtimes/:showtimeId/seatlayout"
-                  element={<SeatPage />}
-                />
+                <Route path="/movie/:movieId/showtimes" element={<Showtimes />} />
+                <Route path="/movie/:movieId/showtimes/:showtimeId/seatlayout" element={<SeatPage />} />
                 <Route path="/booking/summary" element={<BookingSummary />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/test" element={<Testpage />} />

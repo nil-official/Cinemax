@@ -3,27 +3,35 @@ const { Schema, model } = require('mongoose');
 const screenSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     layout: [{
         category: {
             type: String,
-            required: true
+            required: true,
         },
         price: {
             type: Number,
-            required: true
+            required: true,
         },
         rows: [{
             row: {
                 type: String,
-                required: true
+                required: true,
             },
             seats: [{
-                type: String
+                type: String,
             }]
         }]
     }],
-});
+    timeSlots: [{
+        type: String,
+        required: true,
+    }],
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
+}, { timestamps: true, });
 
 module.exports = model('Screen', screenSchema);

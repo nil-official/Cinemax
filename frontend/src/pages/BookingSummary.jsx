@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Card, CardContent, Divider, useMediaQuery, useTheme, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { format } from 'date-fns';
+import { format, parse } from "date-fns";
 import axios from "axios";
 import { createBooking } from "../store/actions/bookings";
 
 const BookingSummary = () => {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -154,9 +153,7 @@ const BookingSummary = () => {
                                     Date: {selectedShowtime ? (format(new Date(selectedShowtime?.date), "dd MMM yyyy")) : "N/A"}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    Time: {selectedShowtime ?
-                                        `${format(new Date(selectedShowtime?.startAt), "hh:mm a")} - 
-                                        ${format(new Date(selectedShowtime?.endAt), "hh:mm a")}` : "N/A"}
+                                    Time: {format(parse(selectedShowtime.timeSlot, "HH:mm", new Date()), "hh:mm a")}
                                 </Typography>
                             </CardContent>
                         </Card>

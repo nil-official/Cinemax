@@ -38,10 +38,8 @@ export const fetchScreen = (screenId) => {
         dispatch(fetchScreenPending());
         try {
             const response = await axios.get(`/screens/${screenId}`);
-            dispatch(fetchScreenFulfilled(response.data));
+            dispatch(fetchScreenFulfilled(response.data.screen));
         } catch (error) {
-            // uncomment to see the error response structure of axios
-            // console.log(error);
             dispatch(fetchScreenRejected(error.message));
         }
     };

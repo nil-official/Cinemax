@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import axios from "../../../axiosConfig";
 import PaginationComponent from "../../../components/PaginationComponent";
 import { toast } from "react-hot-toast";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import DeleteButton from '../../../components/DeleteButton/DeleteButton';
 
 const ShowtimesList = () => {
@@ -40,8 +40,7 @@ const ShowtimesList = () => {
   const fetchShowtimes = async () => {
     try {
       const response = await axios.get("/showtimes");
-      // console.log(response)
-      setShowtimes(response.data);
+      setShowtimes(response.data.showtimes);
     } catch (error) {
       toast.error("Error fetching showtimes");
     } finally {
@@ -176,17 +175,6 @@ const ShowtimesList = () => {
                   color: "black",
                 }}
               >
-                End Time
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  backgroundColor: "#90caf9",
-                  color: "black",
-                }}
-              >
                 Actions
               </TableCell>
             </TableRow>
@@ -204,10 +192,7 @@ const ShowtimesList = () => {
                   {format(new Date(showtime.date), "dd/MM/yyyy")}
                 </TableCell>
                 <TableCell align="center" sx={{ fontSize: "1rem" }}>
-                  {format(new Date(showtime.startAt), "hh:mm a")}
-                </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1rem" }}>
-                  {format(new Date(showtime.endAt), "hh:mm a")}
+                  {format(parse(showtime.timeSlot, "HH:mm", new Date()), "hh:mm a")}
                 </TableCell>
                 <TableCell align="center">
                   <IconButton
@@ -217,14 +202,6 @@ const ShowtimesList = () => {
                   >
                     <Edit />
                   </IconButton>
-                  {/* <IconButton
-                    color="error"
-                    onClick={() => {
-                      handleDelete(showtime._id);
-                    }}
-                  >
-                    <Delete />
-                  </IconButton> */}
                   <DeleteButton onDelete={() => handleDelete(showtime._id)} />
                 </TableCell>
               </TableRow>

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { Box, Typography, Divider } from '@mui/material';
 import WideMovieCard from '../components/WideMovieCard';
 import MovieCarousel from '../components/MovieCarousel/MovieCarousel';
-// import { featuredMovie as FM } from '../../data/movies';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { fetchMovies } from '../store/actions/movies';
@@ -56,8 +55,6 @@ const Homepage = () => {
     try {
       const response = await axios.get('/movies/featured/get');
       setFeaturedMovie(response.data.data[0]);
-      console.log(response.data.data[0]);
-      
     }
     catch (error) {
       console.log(error);

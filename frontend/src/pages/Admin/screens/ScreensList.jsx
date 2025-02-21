@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../../axiosConfig';
-import { 
-  Container, 
-  Grid2, 
-  Typography, 
-  Button, 
-  Card, 
-  CardContent, 
-  CardActions, 
+import {
+  Container,
+  Grid2,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
   IconButton,
   Box,
   CircularProgress,
@@ -18,11 +18,12 @@ import { toast } from 'react-hot-toast';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import DeleteButton from '../../../components/DeleteButton/DeleteButton';
+import { format, parse } from 'date-fns';
 
 const ScreenList = () => {
   const [screens, setScreens] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -33,17 +34,15 @@ const ScreenList = () => {
   const fetchScreens = async () => {
     try {
       const response = await axios.get('/screens');
-      console.log(response)
-      setScreens(response.data);
+      setScreens(response.data.screens);
     } catch (error) {
-      toast.error('Error fetching screens: ' );
+      toast.error('Error fetching screens: ');
     } finally {
       setLoading(false);
     }
   };
 
   const deleteScreen = async (screenId) => {
-
     try {
       const response = await axios.delete(`/screens/${screenId}`);
       setScreens((prevScreens) => prevScreens.filter(screen => screen._id !== screenId));
@@ -63,30 +62,30 @@ const ScreenList = () => {
 
   return (
     <Container
-     sx={{
-         mt: 4,
-         mb: 8,
-         width:"100vw",
-         height:"100vh"
+      sx={{
+        mt: 4,
+        mb: 8,
+        width: "100vw",
+        height: "100vh"
       }}
-     >
-      <Box 
-        sx={{ 
-          display: 'flex', 
+    >
+      <Box
+        sx={{
+          display: 'flex',
           flexDirection: { xs: 'column', sm: 'row' },
-          justifyContent: 'space-between', 
-          alignItems: { xs: 'stretch', sm: 'center' }, 
+          justifyContent: 'space-between',
+          alignItems: { xs: 'stretch', sm: 'center' },
           gap: { xs: 2, sm: 0 },
-          mb: 4 
+          mb: 4
         }}
       >
-        <Typography 
-          variant="h4" 
+        <Typography
+          variant="h4"
           sx={{
-            fontSize: { 
-              xs: '1.5rem', 
-              sm: '2rem', 
-              md: '2.25rem' 
+            fontSize: {
+              xs: '1.5rem',
+              sm: '2rem',
+              md: '2.25rem'
             }
           }}
         >
@@ -124,10 +123,11 @@ const ScreenList = () => {
         <>
           <Grid2 container spacing={5}>
             {screens.map((screen) => (
-              <Grid2 item xs={12} sm={6} md={4} key={screen._id}>
-                <Card 
-                  sx={{ 
+              <Grid2 xs={12} sm={6} md={4} key={screen._id}>
+                <Card
+                  sx={{
                     height: '100%',
+                    minWidth: '250px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -136,23 +136,40 @@ const ScreenList = () => {
                     overflow: 'hidden',
                     transition: 'transform 0.2s',
                     '&:hover': {
-                      transform: 'scale(1.05)', 
+                      transform: 'scale(1.05)',
                     },
                   }}
                 >
                   <CardContent sx={{ padding: '16px' }}>
-                    <Typography variant="h5" sx={{ textTransform: 'uppercase', mb: 1, fontSize: '2rem', fontWeight: 'bolder'}}>
-                      {screen.name.length > 20 ? `${screen.name.slice(0, 20)}...` : screen.name} {/* Truncate long names */}
+                    <Typography variant="h5" sx={{ textTransform: 'uppercase', mb: 1, fontSize: '2rem', fontWeight: 'bolder' }}>
+                      {screen.name.length > 20 ? `${screen.name.slice(0, 20)}...` : screen.name}
                     </Typography>
-                    <Typography variant="body2" color="text.main" sx={{ fontSize: '1.2rem' }}>
-                     {screen.layout.map(item => `${item.category} - ₹ ${item.price}`).join(', ')}
-                    </Typography>
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant='body1' color="text.main" sx={{ fontSize: '1.2rem' }}>
+                        Layout:
+                      </Typography>
+                      {screen.layout.map((item, key) => (
+                        <Typography key={key} variant="body2" color="text.secondary" sx={{ fontSize: '1.2rem' }}>
+                          {`${item.category} - ₹${item.price}`}
+                        </Typography>
+                      ))}
+                    </Box>
+                    <Box>
+                      <Typography variant='body1' color="text.main" sx={{ fontSize: '1.2rem' }}>
+                        Time Slots:
+                      </Typography>
+                      {screen.timeSlots.map((time, key) => (
+                        <Typography key={key} variant="body2" color="text.secondary" sx={{ fontSize: '1.2rem' }}>
+                          {format(parse(time, "HH:mm", new Date()), "hh:mm a")}
+                        </Typography>
+                      ))}
+                    </Box>
                   </CardContent>
                   <CardActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
-                    <Button 
-                      variant="contained" 
-                      color="primary" 
-                      component={Link} 
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component={Link}
                       to={`/admin/screens/edit/${screen._id}`}
                       startIcon={<Edit />}
                       size="small"
@@ -167,7 +184,7 @@ const ScreenList = () => {
                     >
                       <Delete />
                     </IconButton> */}
-                    <DeleteButton onDelete={() => deleteScreen(screen._id)} itemName={screen.name}/>
+                    <DeleteButton onDelete={() => deleteScreen(screen._id)} itemName={screen.name} />
                   </CardActions>
                 </Card>
               </Grid2>
