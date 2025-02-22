@@ -166,6 +166,26 @@ const checkBooking = async (req, res) => {
     }
 }
 
+// Get all bookings for date range
+const getBookingsForDateRange = async (req, res) => {
+    const { startDate, endDate } = req.query;
+    try {
+        const start = new Date(startDate).setHours(0, 0, 0, 0);
+        const end = new Date(endDate).setHours(23, 59, 59, 999);
+        const bookings = await Booking.find({ createdAt: { $gte: start, $lt: end } });
+        res.status(200).json({
+            status: 'success',
+            message: 'Bookings fetched successfully',
+            data: { bookings },
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching bookings',
+        });
+    }
+}
+
 module.exports = {
     createBooking,
     getUserBookings,
@@ -173,5 +193,6 @@ module.exports = {
     getBookedSeats,
     updateBooking,
     deleteBooking,
-    checkBooking
+    checkBooking,
+    getBookingsForDateRange
 };
