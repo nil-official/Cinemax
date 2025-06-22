@@ -177,7 +177,7 @@ const makeMovieFeatured = async (req, res) => {
         message: "Movie featured successfully!",
         data: movie,
       });
-  } catch (e) {
+  } catch (error) {
     res.status(500).send({
       status: "error",
       message: error.message,
