@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const cors = require("cors");
 const throttler = require('./utils/throttleMiddleware')
+const https = require('https');
 
 // Routes
 const authRouter = require('./routes/authRoutes');
@@ -61,3 +62,13 @@ app.use('/bookings', bookingRouter);
 app.use('/dashboard', dashboardRouter);
 
 app.listen(port, () => console.log(`app is running in PORT: ${port}`));
+
+const SELF_URL = process.env.SELFURL || 'https://cinemax.onrender.com';
+
+setInterval(() => {
+  https.get(SELF_URL, (res) => {
+    console.log(`Self-ping success: ${res.statusCode}`);
+  }).on('error', (err) => {
+    console.error('Self-ping error:', err.message);
+  });
+}, 10 * 60 * 1000); // every 10 minutes
