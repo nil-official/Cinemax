@@ -35,7 +35,14 @@ const MovieCarouselCard = ({ movie, theme }) => {
                     sx={{ borderRadius: '8px 8px 0 0' }}
                 />
             </Card>
-            <Typography sx={{ margin: '0 8px', fontSize: '18px', color: theme.palette.text.primary }}>
+            <Typography sx={{ 
+                margin: '0 8px', 
+                fontSize: '18px', 
+                color: theme.palette.text.primary,
+                width: '150px',
+                wordWrap: 'break-word',
+                overflow: 'hidden'
+            }}>
                 {/* {movie.title.length > 15 ? `${movie.title.substring(0, 15)}...` : movie.title} */}
                 {movie.title}
             </Typography>

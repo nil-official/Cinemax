@@ -96,11 +96,6 @@ const AddMovie = () => {
       return false;
     }
 
-    if (release < today) {
-      toast.error('Release date cannot be in the past');
-      return false;
-    }
-
     if (end <= release) {
       toast.error('End date must be after release date');
       return false;
@@ -128,8 +123,8 @@ const AddMovie = () => {
   };
 
   const handleSubmit = async (e) => {
-    if (!validateDates()) return;
     e.preventDefault();
+    if (!validateDates()) return;
     try {
       const formattedData = {
         title: movieData.title,
@@ -144,9 +139,6 @@ const AddMovie = () => {
         releaseDate: movieData.releaseDate,
         endDate: movieData.endDate,
       };
-
-      // console.log("Formatted Data:", formattedData); // Log the data being sent
-
       if (id) {
         await axios.put(`/movies/${id}`, formattedData);
         setMovieData(initialState);
@@ -156,7 +148,6 @@ const AddMovie = () => {
         setMovieData(initialState);
         toast.success("Movie added successfully");
       }
-      setTimeout(() => navigate("/admin/movies"), 1000);
     } catch (error) {
       console.error("Error:", error); // Log the error for debugging
       toast.error(error.response?.data?.error || "Error saving movie");

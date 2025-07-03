@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const validator = require('validator');
-const { Schema } = mongoose;
+
 const movieSchema = new Schema({
   title: {
     type: String,
@@ -59,8 +59,10 @@ const movieSchema = new Schema({
     type: Date,
     required: true,
   },
-});
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+}, { timestamps: true, });
 
-const Movie = mongoose.model('Movie', movieSchema);
-
-module.exports = Movie;
+module.exports = model('Movie', movieSchema);

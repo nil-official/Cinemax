@@ -69,7 +69,7 @@ const Homepage = () => {
     <Box sx={{ borderRadius: '10px', marginBottom: 8}}>
       {featuredMovie !== null && (
         <div onClick={handleWideMovie}>
-          <WideMovieCard movie={featuredMovie} />
+          {/* <WideMovieCard movie={featuredMovie} /> */}
         </div>
       )}
 

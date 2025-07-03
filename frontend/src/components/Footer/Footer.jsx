@@ -53,10 +53,10 @@ const Footer = () => {
                             Contact
                         </Typography>
                         <Typography variant="body2" sx={{ marginTop: "8px", opacity: 0.7 }}>
-                            Email: support@cinemax.com
+                            Email: support@cinemax.in
                         </Typography>
                         <Typography variant="body2" sx={{ opacity: 0.7 }}>
-                            Phone: +91 6289851463
+                            Phone: +91 0123456789
                         </Typography>
                     </Grid>
                 </Grid>

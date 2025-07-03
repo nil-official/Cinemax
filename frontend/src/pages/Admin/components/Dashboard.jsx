@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "../../../axiosConfig";
 import {
   Card,
@@ -15,11 +14,10 @@ import RevenueChart from "./RevenueChart";
 
 const Dashboard = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const [revenueData, setRevenueData] = useState({ x: [], y: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [totalBookings, setTotalBookings] = useState(null);
+  const [totalBookings, setTotalBookings] = useState(null); // State for total bookings
 
   useEffect(() => {
     const fetchRevenueData = async () => {
@@ -51,13 +49,14 @@ const Dashboard = () => {
     fetchRevenueData();
   }, []);
 
+  // Fetch total bookings
   useEffect(() => {
     const fetchTotalBookings = async () => {
       try {
         const response = await axios.get("/dashboard/total-bookings/");
 
         if (response.data.status === "success") {
-          setTotalBookings(response.data.data);
+          setTotalBookings(response.data.data); // Assuming the response contains count
         } else {
           throw new Error("Failed to fetch total bookings");
         }
@@ -69,16 +68,12 @@ const Dashboard = () => {
     fetchTotalBookings();
   }, []);
 
+  useEffect(() => {
+    console.log(revenueData);
+  }, [revenueData])
+
+  // Calculate total revenue for last 30 days
   const totalRevenueLast30Days = revenueData.y.reduce((sum, value) => sum + value, 0);
-
-  const handleCardClick = (days) => {
-    const today = new Date();
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - days);
-    const endDate = new Date(today);
-
-    navigate(`/admin/bookings?startDate=${startDate.toISOString().split("T")[0]}&endDate=${endDate.toISOString().split("T")[0]}`);
-  };
 
   return (
     <Box sx={{ padding: "24px" }}>
@@ -96,24 +91,21 @@ const Dashboard = () => {
         Dashboard
       </Typography>
 
+      {/* Top Stats Cards */}
       {revenueData.x.length > 0 && revenueData.y.length > 0 ? (
         <Grid container spacing={3}>
-          {[{
-            title: "Today's Revenue", value: `₹ ${revenueData.y[0]}`, days: 0
-          }, {
-            title: "Revenue for Last 30 Days", value: `₹ ${totalRevenueLast30Days}`, days: 30
-          }, {
-            title: "Today's Bookings", value: totalBookings !== null ? totalBookings : "-", days: 0
-          }].map((stat, index) => (
+          {[
+            { title: "Today's Revenue", value: `₹ ${revenueData.y[0]}` },
+            { title: "Revenue for Last 30 Days", value: `₹ ${totalRevenueLast30Days}` },
+            { title: "Today's Bookings", value: totalBookings !== null ? totalBookings : "-" },
+          ].map((stat, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Card
-                onClick={() => handleCardClick(stat.days)}
                 sx={{
                   borderRadius: "12px",
                   boxShadow: 3,
                   transition: "0.3s",
-                  cursor: "pointer",
-                  "&:hover": { boxShadow: 6, backgroundColor: "#212a47" },
+                  "&:hover": { boxShadow: 6 },
                 }}
               >
                 <CardContent>
@@ -134,8 +126,12 @@ const Dashboard = () => {
         <Typography textAlign="center">No data available</Typography>
       )}
 
+      {/* Revenue Chart */}
       <Card sx={{ borderRadius: "12px", boxShadow: 3, marginTop: "24px" }}>
-        <CardHeader title="Revenue Overview" sx={{ padding: "30px 0 0 30px" }} />
+        <CardHeader
+          title="Revenue Overview"
+          sx={{ padding: "30px 0 0 30px" }}
+        />
         <CardContent>
           {loading ? (
             <Box display="flex" justifyContent="center" alignItems="center">

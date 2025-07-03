@@ -9,6 +9,5 @@ router.get('/showtime/:showtimeId/screen/:screenId', bookingController.getBooked
 router.put('/:bookingId', bookingController.updateBooking);
 router.delete('/:bookingId', bookingController.deleteBooking);
 router.get('/check/:bookingId', bookingController.checkBooking);
-router.get('/dateRange', bookingController.getBookingsForDateRange);
 
 module.exports = router;
