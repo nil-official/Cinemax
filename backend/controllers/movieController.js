@@ -146,11 +146,12 @@ const getUpcoming = async (req, res) => {
 // Get featured movies
 const getFeaturedMovie = async (req, res) => {
   try {
-    const featuredMovies = await Movie.find({ isFeatured: true });
+    // const featuredMovies = await Movie.find({ isFeatured: true });
+    const featuredMovie = await Movie.findOne({title: "Captain America: Brave New World"});
     res.status(200).json({
       status: 'success',
       message: 'Featured movies fetched successfully',
-      data: featuredMovies,
+      data: featuredMovie,
     });
   } catch (error) {
     console.log(error);

@@ -54,7 +54,7 @@ const Homepage = () => {
     // fetch upcoming movies
     try {
       const response = await axios.get('/movies/featured/get');
-      setFeaturedMovie(response.data.data[0]);
+      setFeaturedMovie(response.data.data);
     }
     catch (error) {
       console.log(error);
@@ -69,7 +69,7 @@ const Homepage = () => {
     <Box sx={{ borderRadius: '10px', marginBottom: 8}}>
       {featuredMovie !== null && (
         <div onClick={handleWideMovie}>
-          {/* <WideMovieCard movie={featuredMovie} /> */}
+          <WideMovieCard movie={featuredMovie} />
         </div>
       )}
 
