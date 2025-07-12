@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format, parse } from "date-fns";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { createBooking } from "../store/actions/bookings";
 
 const BookingSummary = () => {
@@ -13,6 +14,7 @@ const BookingSummary = () => {
     const { selectedMovie } = useSelector((state) => state.movieState);
     const { selectedShowtime } = useSelector((state) => state.showtimeState);
     const { screen, selectedSeats } = useSelector((state) => state.screenState);
+    const { loading, user, isAuthenticated, error } = useSelector((state) => state.authState);
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -39,23 +41,10 @@ const BookingSummary = () => {
 
     // Handle payment
     const handlePayment = async () => {
-        // const bookingData = {
-        //     amount: totalPrice,
-        //     showtime: selectedShowtime,
-        //     seats: selectedSeats,
-        //     movie: selectedMovie,
-        //     user: {
-        //         name: "Niladri Chakraborty",
-        //         email: "nil@example.com",
-        //         phone: "8013314898",
-        //     }
-        // };
-        // try {
-        //     dispatch(createBooking(bookingData));
-        //     navigate("/bookings");
-        // } catch (error) {
-        //     alert("Error: " + error.message);
-        // }
+        if (loading && !isAuthenticated) {
+            toast.error("Please login first");
+            return;
+        }
 
         const { data: { order } } = await axios.post('/payments/checkout', { "amount": totalPrice });
 
@@ -90,9 +79,9 @@ const BookingSummary = () => {
                 }
             },
             prefill: {
-                name: "Niladri Chakraborty",
-                email: "nil@example.com",
-                contact: "8282808897"
+                name: user.firstName + ' ' + user.lastName,
+                email: user.email,
+                contact: user.phone,
             },
         };
         const razor = new window.Razorpay(options);

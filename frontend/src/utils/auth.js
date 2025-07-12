@@ -1,31 +1,22 @@
-export const isBrowser = () => {
-  typeof window !== 'undefined'
-};
-
 export const getUser = () => {
-  isBrowser() && window.localStorage.getItem('user')
-    ? JSON.parse(window.localStorage.getItem('user'))
-    : {};
+  return JSON.parse(window.localStorage.getItem('user-info'));
 };
 
-export const setUser = (userData) => {
-  window.localStorage.setItem('user', JSON.stringify(userData));
-};
+export const saveUser = (authData) => {
+  const userInfo = {
+    user: authData.data.user,
+    token: authData.token,
+    expiresIn: authData.expiresIn,
+  }
+  window.localStorage.setItem('user-info', JSON.stringify(userInfo));
+}
 
 export const removeUser = () => {
-  window.localStorage.removeItem('user')
+  window.localStorage.removeItem('user-info')
 };
 
-export const isLoggedIn = () => {
-  const user = getUser();
-  return !!user.email;
-};
-
-// function to decode jwt from localStorage
 export const getUserRole = () => {
-  // parse the string from localStorage to JSON to access properties
-  const token = JSON.parse(localStorage.getItem("user"))?.token; 
-  
+  const token = getUser()?.token;
   if (!token) return null;
 
   try {
