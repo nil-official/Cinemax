@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { getUser } from './utils/auth';
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 axios.interceptors.request.use(
     (config) => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.token) {
-            config.headers.Authorization = `Bearer ${user.token}`;
+        const userInfo = getUser();
+        if (userInfo && userInfo.token) {
+            config.headers.Authorization = `Bearer ${userInfo.token}`;
         }
         return config;
     },

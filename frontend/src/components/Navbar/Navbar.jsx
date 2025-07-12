@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Box, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom';
 import NavbarDropdown from './NavbarDropdown';
@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import SearchBar from './SearchBar';
 import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ user, onLogout }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -38,7 +38,7 @@ const Navbar = ({ user, onLogout }) => {
               <SearchIcon />
             </IconButton>
 
-            <NavbarDropdown user={user} onLogout={onLogout} />
+            <NavbarDropdown />
           </div>
         </Toolbar>
 

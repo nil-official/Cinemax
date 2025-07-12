@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -22,7 +22,6 @@ import Register from "./pages/Register";
 import SeatPage from "./pages/SeatPage";
 import Bookings from "./pages/Bookings";
 import BookingSummary from "./pages/BookingSummary";
-import RefreshHandler from "./components/RefreshHandler";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Sidebar from "./pages/Admin/components/Sidebar";
 import Dashboard from "./pages/Admin/components/Dashboard";
@@ -39,11 +38,15 @@ import Footer from "./components/Footer/Footer";
 import SearchResults from "./pages/SearchResults";
 import AdminRoute from "./routes/AdminRoute";
 import Showtimes from "./pages/Showtimes";
+import { useDispatch } from "react-redux";
+import { loadUser } from "./store/actions/auth";
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const handleLogout = () => setUser(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
 
   const theme = createTheme({
     palette: {
@@ -76,7 +79,7 @@ const App = () => {
   const Layout = () => {
     return (
       <>
-        <Navbar user={user} onLogout={handleLogout} />
+        <Navbar />
         <Outlet />
         <Footer />
       </>
@@ -105,7 +108,6 @@ const App = () => {
       <Toaster position="bottom-right" reverseOrder={false} />
       <CssBaseline />
       <Router>
-        <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
         <Container width="100%" height="100vh" sx={{
           backgroundImage:
             "radial-gradient(circle, rgb(12, 22, 54) 0%, rgba(7,9,16,1) 65%)"

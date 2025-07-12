@@ -48,6 +48,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated, error } = useSelector((state) => state.authState);
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
@@ -67,7 +68,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    dispatch(login({ email, password }));
   };
 
   return (

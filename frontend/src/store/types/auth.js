@@ -1,18 +1,11 @@
- const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
- const REGISTER_FAIL = 'REGISTER_FAIL';
- const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
- const LOGIN_FAIL = 'LOGIN_FAIL';
+export const LOAD_USER = "LOAD_USER";
 
- const USER_LOADED = 'USER_LOADED';
- const AUTH_ERROR = 'AUTH_ERROR';
- const LOGOUT = 'LOGOUT';
+export const REGISTER_REQUEST = "REGISTER_REQUEST";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
- export {
-        REGISTER_SUCCESS,
-        REGISTER_FAIL,
-        LOGIN_SUCCESS,
-        LOGIN_FAIL,
-        USER_LOADED,
-        AUTH_ERROR,
-        LOGOUT
-    };
+export const LOGIN_REQUEST = "LOGIN_REQUEST";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAILURE = "LOGIN_FAILURE";
+
+export const LOGOUT = "LOGOUT";

@@ -1,36 +1,64 @@
 import {
+  LOAD_USER,
+  REGISTER_REQUEST,
   REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
+  REGISTER_FAILURE,
+  LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT
+  LOGIN_FAILURE,
+  LOGOUT,
 } from '../types/auth';
 
 const initialState = {
-  token: localStorage.getItem('user')?.token,
-  isAuthenticated: null,
-  loading: true,
+  loading: false,
   user: null,
+  isAuthenticated: false,
+  error: null
 };
 
 export default (state = initialState, action) => {
-  const { type, payload } = action;
-  switch (type) {
-    case USER_LOADED:
-      return { ...state, user: payload, isAuthenticated: true, loading: false };
+  switch (action.type) {
+    case REGISTER_REQUEST:
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        user: null,
+        isAuthenticated: false,
+        error: null
+      };
+
+    case LOAD_USER:
     case REGISTER_SUCCESS:
-      return { ...state, ...payload, user: payload.data.user, isAuthenticated: true, loading: false };
     case LOGIN_SUCCESS:
-      return { ...state, ...payload, user: payload.data.user, isAuthenticated: true, loading: false };
-    case REGISTER_FAIL:
-    case LOGIN_FAIL:
-    case AUTH_ERROR:
+      return {
+        ...state,
+        loading: false,
+        user: action.user,
+        isAuthenticated: true,
+        error: null
+      };
+
+    case REGISTER_FAILURE:
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        user: null,
+        isAuthenticated: false,
+        error: action.error
+      };
+
     case LOGOUT:
-      localStorage.removeItem('code');
-      return { ...state, token: null, isAuthenticated: false, loading: false, user: null };
+      return {
+        ...state,
+        loading: false,
+        user: null,
+        isAuthenticated: false,
+        error: null
+      };
+
     default:
-      return state;
+      return state ?? initialState;
   }
 };

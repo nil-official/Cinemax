@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Avatar,
   Menu,
@@ -6,19 +6,15 @@ import {
   IconButton,
   Typography,
   Box,
-  Switch,
   Button,
   Divider,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { IoTicketOutline } from "react-icons/io5";
 import { FiUser, FiLogOut, FiLogIn } from "react-icons/fi";
-import { BsSun, BsMoon } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/actions/auth";
-import { use } from "react";
-import { getUserRole } from "../../utils/auth";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -32,25 +28,11 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
 }));
 
 const NavbarDropdown = () => {
-
-  const [user, setUser] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  // const { isAuthenticated, user } = useSelector((state) => state.authState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { user } = useSelector((state) => state.authState);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser)?.user;
-      setUser(parsedUser);
-    }
-  }, []);
-
-  // check if user is admin or not
-  const isAdmin = getUserRole() === "admin";
-  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -61,7 +43,6 @@ const NavbarDropdown = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    setUser(null);
     handleClose();
     navigate("/");
   };
@@ -144,17 +125,15 @@ const NavbarDropdown = () => {
               My Bookings
             </MenuItem>
 
-            {
-              isAdmin && (
-                <>
-                  <Divider />
-                  <MenuItem onClick={() => navigate("/admin")}>
-                    <FiUser style={{ marginRight: "10px" }} />
-                    Admin Dashboard
-                  </MenuItem>
-                </>
-              )
-            }
+            {(user.role === 'admin' || user.role === 'superadmin') && (
+              <>
+                <Divider />
+                <MenuItem onClick={() => navigate("/admin")}>
+                  <FiUser style={{ marginRight: "10px" }} />
+                  Admin Dashboard
+                </MenuItem>
+              </>
+            )}
 
             {/* <MenuItem>
               {isDarkMode ? (
