@@ -1,15 +1,16 @@
 const router = require('express').Router();
+const auth = require('../middlewares/auth');
 const screenController = require('../controllers/screenController');
 
-router.get('/', screenController.getAllScreens);
+// Public routes
 router.get('/:screenId', screenController.getScreenById);
 
-router.post('/', screenController.createScreen);
-router.post('/multiple', screenController.createMultipleScreens);
-router.post('/slots', screenController.getAvailableSlots);
-
-router.put('/:screenId', screenController.updateScreen);
-
-router.delete('/:screenId', screenController.deleteScreen);
+// Admin routes
+router.get('/', auth.enhance, screenController.getAllScreens);
+router.post('/', auth.enhance, screenController.createScreen);
+router.post('/multiple', auth.enhance, screenController.createMultipleScreens);
+router.post('/slots', auth.enhance, screenController.getAvailableSlots);
+router.put('/:screenId', auth.enhance, screenController.updateScreen);
+router.delete('/:screenId', auth.enhance, screenController.deleteScreen);
 
 module.exports = router;

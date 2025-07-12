@@ -1,38 +1,73 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userSchema');
 
-const simple = async (req, res, next) => {
+const extractToken = (req) => {
+  const authHeader = req.header('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw { status: 401, message: 'Authorization token missing' };
+  }
+  return authHeader.replace('Bearer ', '').trim();
+};
+
+const verifyUser = async (decoded) => {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({
       _id: decoded._id,
-      'tokens.token': token,
+      email: decoded.email,
     });
-    if (!user) throw new Error();
-    req.token = token;
-    req.user = user;
-    next();
-  } catch (e) {
-    res.status(401).send({ error: 'Please authenticate.' });
+
+    if (!user) {
+      throw { status: 401, message: 'User not found' };
+    }
+    return user;
+  } catch (err) {
+    if (err.status && err.message) throw err;
+    throw { status: 500, message: 'Database error while verifying user' };
   }
 };
 
-const enhance = async (req, res, next) => {
+const extractUserAndToken = async (req) => {
+  const token = extractToken(req);
+  let decoded;
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({
-      _id: decoded._id,
-      'tokens.token': token,
-    });
-    if (!user || user.role !== 'guest') throw new Error();
-    req.token = token;
-    req.user = user;
-    next();
-  } catch (e) {
-    res.status(401).send({ error: 'Please authenticate.' });
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (jwtErr) {
+    throw { status: 401, message: 'Invalid or expired token' };
   }
+  const user = await verifyUser(decoded);
+  return { user, token };
 };
 
-module.exports = { simple, enhance };
+const authorize = (allowedRoles = []) => {
+  return async (req, res, next) => {
+    try {
+      const { user, token } = await extractUserAndToken(req);
+
+      if (!allowedRoles.includes(user.role)) {
+        throw {
+          status: 403,
+          message: `Access denied: ${allowedRoles.join(' or ')} role required`,
+        };
+      }
+
+      req.user = user;
+      req.token = token;
+      next();
+    } catch (err) {
+      res.status(err.status || 401).json({
+        status: "error",
+        message: err.message || "Please authenticate.",
+      });
+    }
+  };
+};
+
+const simple = authorize(['user', 'admin', 'superadmin']);
+const enhance = authorize(['admin', 'superadmin']);
+const elevate = authorize(['superadmin']);
+
+module.exports = {
+  simple,
+  enhance,
+  elevate
+};
