@@ -26,8 +26,8 @@ const SearchResults = () => {
             <h1>Search Results</h1>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
                 {movies.length > 0 ? (
-                    movies.map(movie => (
-                        <MovieCard key={movie.id} movie={movie} theme={theme} />
+                    movies.map((movie, id) => (
+                        <MovieCard key={id} movie={movie} theme={theme} />
                     ))
                 ) : (
                     <p>No results found.</p>

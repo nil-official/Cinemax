@@ -1,7 +1,9 @@
 const router = require('express').Router();
+const auth = require('../middlewares/auth');
 const dashboardController = require('../controllers/dashboardController');
 
-router.post('/revenue', dashboardController.getRevenueByDays);
-router.get('/total-bookings', dashboardController.getTotalBookings);
+// Admin Routes
+router.post('/revenue', auth.enhance, dashboardController.getRevenueByDays);
+router.get('/total-bookings', auth.enhance, dashboardController.getTotalBookings);
 
 module.exports = router;

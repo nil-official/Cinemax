@@ -278,7 +278,6 @@ const deleteMovie = async (req, res) => {
 const searchMovie = async (req, res) => {
   const query = req.query.q;
   try {
-    console.log(query);
     const movies = await Movie.find({
       title: { $regex: query, $options: "i" },
     });
